@@ -288,6 +288,12 @@ namespace Hat.NET
                                 WCParser.Parse(File.ReadAllText(filename), p.outputStream);
                                 flag = true;
                                 break;
+                            case ".css":
+                                flag = true;
+                                p.writeSuccess("text/css");
+                                p.outputStream.Write(File.ReadAllText(filename));
+                                p.outputStream.Flush();
+                                break;
                             default:
                                 flag = true;
                                 p.writeSuccess();
@@ -326,8 +332,13 @@ namespace Hat.NET
                 case ".wc":
                     WCParser.Parse(File.ReadAllText(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Substring(1))), p.outputStream);
                     break;
+                case ".css":
+                    p.writeSuccess("text/css");
+                    p.outputStream.Write(File.ReadAllText(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Substring(1))));
+                    p.outputStream.Flush();
+                    break;
                 default:
-                    p.writeSuccess();
+                    p.writeSuccess("text/plain");
                     p.outputStream.Write(File.ReadAllText(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Substring(1))));
                     p.outputStream.Flush();
                     break;
