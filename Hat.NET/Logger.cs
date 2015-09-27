@@ -121,6 +121,7 @@ namespace Hat.NET
             output.Write(existingContents);
             output.WriteLine();
             output.Write(LogContent);
+            output.Flush();
             output.Close();
             LogContent.Clear();
         }

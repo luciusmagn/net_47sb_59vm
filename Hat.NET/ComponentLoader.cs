@@ -26,7 +26,7 @@ using System.Runtime.InteropServices;
 
 namespace Hat.NET
 {
-    public static class ExtensionLoader
+    public static class ComponentLoader
     {
         public const string ExtensionsPath = "servercomponents";
         private static readonly Dictionary<string, Assembly> loadedAssemblies = new Dictionary<string, Assembly>();
@@ -41,14 +41,8 @@ namespace Hat.NET
             get { return new ReadOnlyCollection<ComponentContainer>(extensions); }
         }
 
-        static ExtensionLoader()
-        {
-        }
-
         internal static void Initialize()
         {
-            Logger.Log(
-                string.Format("Halcyon v{0} started.", ApiVersion.Major.ToString() + "." + ApiVersion.Minor.ToString()));
             ExtensionsDirectoryPath = Path.Combine(Environment.CurrentDirectory, ExtensionsPath);
             if (!Directory.Exists(ExtensionsDirectoryPath))
             {
@@ -63,8 +57,6 @@ namespace Hat.NET
                 else
                 {
                     Directory.CreateDirectory(ExtensionsDirectoryPath);
-                    Logger.Log(string.Format(
-                    "Folder extensions does not exist. Creating now."));
                 }
             }
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;

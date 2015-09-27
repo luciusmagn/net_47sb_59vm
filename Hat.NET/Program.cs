@@ -351,6 +351,7 @@ namespace Hat.NET
             {
                 File.WriteAllText(Path.Combine(Environment.CurrentDirectory, "server/404"), "<h1>404 - Not found</h1><br><h5>__________________________________________________________________<br>Hat.NET - an opensource .NET webserver software</h5>".WriteHTMLStub());
             }
+            ComponentLoader.Initialize();
             if (args.GetLength(0) > 0)
             {
                 httpServer = new HttpServer(Convert.ToInt16(args[0]));
