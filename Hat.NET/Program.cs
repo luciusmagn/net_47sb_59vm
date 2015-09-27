@@ -268,7 +268,7 @@ namespace Hat.NET
                         if (!Interaction.Interaction.TryExtension(Path.GetExtension(filename), p, filename))
                         {
                             p.writeSuccess("text/plain");
-                            p.outputStream.Write("banana"/*File.ReadAllText(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Substring(1)))*/);
+                            p.outputStream.Write(File.ReadAllText(filename));
                             p.outputStream.Flush();
                             return;
                         }
