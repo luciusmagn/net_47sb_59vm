@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
+using System.ComponentModel;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading;
 
 // offered to the public domain for any use with no restriction
@@ -130,6 +132,7 @@ namespace Hat.NET
 
         public void handleGETRequest()
         {
+            Console.WriteLine("GET");
             srv.handleGETRequest(this);
         }
 
@@ -179,6 +182,7 @@ namespace Hat.NET
                 ms.Seek(0, SeekOrigin.Begin);
             }
             Console.WriteLine("get post data end");
+            Console.WriteLine("POST");
             srv.handlePOSTRequest(this, new StreamReader(ms));
 
         }
@@ -221,10 +225,12 @@ namespace Hat.NET
 
         public void listen()
         {
+            Console.WriteLine("listening");
             listener = new TcpListener(port);
             listener.Start();
             while (is_active)
             {
+                Console.WriteLine(is_active);
                 TcpClient s = listener.AcceptTcpClient();
                 HttpProcessor processor = new HttpProcessor(s, this);
                 Thread thread = new Thread(new ThreadStart(processor.process));
@@ -236,10 +242,22 @@ namespace Hat.NET
         public void handleGETRequest(HttpProcessor p)
         {
             Console.WriteLine("request: {0}", p.http_url);
-            Console.WriteLine(Path.GetExtension(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Substring(1))));
+            Console.WriteLine(Path.GetExtension(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Length == 1 ? "index" : p.http_url.Substring(1))));
+            //If file doesn't exist try trying it as a folder
+            if(Directory.Exists(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Length == 1 ? "" : p.http_url.Substring(1))) && !File.Exists(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Length == 1 ? "" : p.http_url.Substring(1))))
+            {
+                p.http_url += "/";
+            }
+            //if everything else fails, try 404
+            else if(!Directory.Exists(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Length == 1 ? "" : p.http_url.Substring(1))) && !File.Exists(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Length == 1 ? "" : p.http_url.Substring(1))))
+            {
+                handle404(p);
+                return;
+            }
             if(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url).EndsWith("/"))
             {
-                string[] files = Directory.GetFiles(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url));
+                Logger.Log(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url));
+                string[] files = Directory.GetFiles(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), (p.http_url.Length == 1 ? "" : p.http_url.Substring(1))));
                 bool flag = false;
                 foreach(string filename in files)
                 {
@@ -262,6 +280,7 @@ namespace Hat.NET
                                 break;
                             default:
                                 flag = true;
+                                p.writeSuccess();
                                 p.outputStream.Write(File.ReadAllText(filename));
                                 p.outputStream.Flush();
                                 break;
@@ -271,11 +290,13 @@ namespace Hat.NET
                 }
                 if (!flag)
                 {
-                    p.outputStream.WriteLine("<a href=\"../\">../</a><br>");
+                    StringBuilder sb = new StringBuilder();
+                    sb.AppendLine("<a href=\"../\">../</a><br>");
                     foreach(string file in files)
                     {
-                        p.outputStream.WriteLine(string.Format("<a href=\"{0}\">{0}</a><br>", file.Replace(Path.Combine(Environment.CurrentDirectory, "server"), "")));
+                        sb.AppendLine(string.Format("<a href=\"{0}\">{0}</a><br>", file.Replace(Path.Combine(Environment.CurrentDirectory, "server"), "")));
                     }
+                    p.outputStream.WriteLine(sb.ToString());
                     p.writeSuccess();
                     p.outputStream.Flush();
                     return;
@@ -285,8 +306,8 @@ namespace Hat.NET
             switch (Path.GetExtension(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Substring(1))))
             {
                 case ".png":
-                    Console.WriteLine("picture");
-                    Console.WriteLine(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Substring(1)));
+                    Logger.Log("picture");
+                    Logger.Log(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Substring(1)));
                     Stream fs = File.Open(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Substring(1)), FileMode.Open);
                     p.writeSuccess("image/png");
                     fs.CopyTo(p.outputStream.BaseStream);
@@ -296,6 +317,7 @@ namespace Hat.NET
                     WCParser.Parse(File.ReadAllText(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Substring(1))), p.outputStream);
                     break;
                 default:
+                    p.writeSuccess();
                     p.outputStream.Write(File.ReadAllText(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Substring(1))));
                     p.outputStream.Flush();
                     break;
@@ -311,23 +333,48 @@ namespace Hat.NET
             p.outputStream.WriteLine("<a href=/test>return</a><p>");
             p.outputStream.WriteLine("postbody: <pre>{0}</pre>", data);
         }
+
+        public static void handle404(HttpProcessor p)
+        {
+            if (File.Exists(Path.Combine(Environment.CurrentDirectory, "server/404")))
+            {
+                string fs = File.ReadAllText(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), "404"));
+                p.writeSuccess();
+                p.outputStream.WriteLine(fs);
+                p.outputStream.Flush();
+            }
+            else
+            {
+                p.writeSuccess();
+                p.outputStream.WriteLine("<h1>404 404 - 404 Not found</h1>".WriteHTMLStub());
+                p.outputStream.Flush();
+            }
+        }
     }
-    public class TestMain
+    public class Program
     {
-        public static int Main(String[] args)
+        public static bool Talkative = false;
+        public static event EventHandler<HandledEventArgs> Exit = delegate { };
+        public static int Main(string[] args)
         {
             HttpServer httpServer;
             if(!Directory.Exists(Path.Combine(Environment.CurrentDirectory, "server")))
             {
                 Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, "server"));
             }
+            if(!File.Exists(Path.Combine(Environment.CurrentDirectory, "server/404")))
+            {
+                File.WriteAllText(Path.Combine(Environment.CurrentDirectory, "server/404"), "<h1>404 - Not found</h1><br><h5>__________________________________________________________________<br>Hat.NET - an opensource .NET webserver software</h5>".WriteHTMLStub());
+            }
             if (args.GetLength(0) > 0)
             {
                 httpServer = new HttpServer(Convert.ToInt16(args[0]));
+                Console.WriteLine("Listening on port ", args[0]);
             }
             else
             {
                 httpServer = new HttpServer(8080);
+                Console.WriteLine("Listening on port 8080");
             }
             Thread thread = new Thread(new ThreadStart(httpServer.listen));
             thread.Start();

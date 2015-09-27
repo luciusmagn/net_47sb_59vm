@@ -152,13 +152,16 @@ namespace Hat.NET
             while (source.GetEnumerator().MoveNext());
             return temp;
         }
-        public static string WriteHTMLStub(this string source)
+        public static string WriteHTMLStub(string body, string head = "")
         {
-
+            return string.Format("<!DOCTYPE HTML>\n<html>\n<head>{0}</head>\n<body>{1}</body>\n</html>", head, body);
         }
-        public static string WriteHTMLStub(string source)
+    }
+    public static class StringUtils
+    {
+        public static string WriteHTMLStub(this string source, string head = "")
         {
-
+            return string.Format("<!DOCTYPE HTML>\n<html>\n<head>{0}</head>\n<body>{1}</body>\n</html>", head, source);
         }
     }
     public enum What
