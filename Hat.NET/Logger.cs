@@ -29,6 +29,7 @@ namespace Hat.NET
         public static void Log(params object[] args)
         {
             LogContent.Append("[" + DateTime.Now.ToLongTimeString() + "]");
+            FullLog.Append("[" + DateTime.Now.ToLongTimeString() + "]");
             foreach (object arg in args)
             {
                 Console.Write(arg);
@@ -46,6 +47,7 @@ namespace Hat.NET
         public static void TalkyLog(params object[] args)
         {
             LogContent.Append("[" + DateTime.Now.ToLongTimeString() + "]");
+            FullLog.Append("[" + DateTime.Now.ToLongTimeString() + "]");
             foreach (object arg in args)
             {
                 if (Program.Talkative)
@@ -83,6 +85,7 @@ namespace Hat.NET
         public static void LogNoTrace(params object[] args)
         {
             LogContent.Append("[" + DateTime.Now.ToLongTimeString() + "]");
+            FullLog.Append("[" + DateTime.Now.ToLongTimeString() + "]");
             foreach (object arg in args)
             {
                 LogContent.Append(arg);
@@ -149,6 +152,10 @@ namespace Hat.NET
                 output.Close();
                 LogContent.Clear();
             }
+        }
+        public static void ViewLog(StreamWriter p)
+        {
+            p.WriteLine(FullLog.ToString());
         }
     }
 }

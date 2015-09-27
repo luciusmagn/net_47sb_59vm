@@ -140,7 +140,7 @@ namespace Hat.NET
             string temp = "";
             do
             {
-                if(source[source.GetEnumerator().Current] == ' ')
+                if(source[source.GetEnumerator().Current] == ' ' || source[source.GetEnumerator().Current] == '\t')
                 {
                     continue;
                 }

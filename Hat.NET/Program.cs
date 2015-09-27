@@ -76,10 +76,14 @@ namespace Hat.NET
             }
             catch (Exception e)
             {
-                Console.WriteLine("Exception: " + e.ToString());
+                Logger.Log("Exception: " + e.ToString());
                 writeFailure();
             }
-            outputStream.Flush();
+            try
+            {
+                outputStream.Flush();
+            }
+            catch {  }
             // bs.Flush(); // flush any remaining output
             inputStream = null; outputStream = null; // bs = null;            
             socket.Close();
@@ -87,7 +91,7 @@ namespace Hat.NET
 
         public void parseRequest()
         {
-            String request = streamReadLine(inputStream);
+            string request = streamReadLine(inputStream);
             string[] tokens = request.Split(' ');
             if (tokens.Length != 3)
             {
@@ -97,18 +101,18 @@ namespace Hat.NET
             http_url = tokens[1];
             http_protocol_versionstring = tokens[2];
 
-            Console.WriteLine("starting: " + request);
+            Logger.Log("starting: " + request);
         }
 
         public void readHeaders()
         {
-            Console.WriteLine("readHeaders()");
-            String line;
+            Logger.Log("readHeaders()");
+            string line;
             while ((line = streamReadLine(inputStream)) != null)
             {
                 if (line.Equals(""))
                 {
-                    Console.WriteLine("got headers");
+                    Logger.Log("got headers");
                     return;
                 }
 
@@ -117,7 +121,7 @@ namespace Hat.NET
                 {
                     throw new Exception("invalid http header line: " + line);
                 }
-                String name = line.Substring(0, separator);
+                string name = line.Substring(0, separator);
                 int pos = separator + 1;
                 while ((pos < line.Length) && (line[pos] == ' '))
                 {
@@ -125,7 +129,7 @@ namespace Hat.NET
                 }
 
                 string value = line.Substring(pos, line.Length - pos);
-                Console.WriteLine("header: {0}:{1}", name, value);
+                Logger.Log(string.Format("header: {0}:{1}", name, value));
                 httpHeaders[name] = value;
             }
         }
@@ -145,7 +149,7 @@ namespace Hat.NET
             // we hand him needs to let him see the "end of the stream" at this content 
             // length, because otherwise he won't know when he's seen it all! 
 
-            Console.WriteLine("get post data start");
+            Logger.Log("get post data start");
             int content_len = 0;
             MemoryStream ms = new MemoryStream();
             if (this.httpHeaders.ContainsKey("Content-Length"))
@@ -161,10 +165,10 @@ namespace Hat.NET
                 int to_read = content_len;
                 while (to_read > 0)
                 {
-                    Console.WriteLine("starting Read, to_read={0}", to_read);
+                    Logger.Log("starting Read, to_read={0}", to_read);
 
                     int numread = this.inputStream.Read(buf, 0, Math.Min(BUF_SIZE, to_read));
-                    Console.WriteLine("read finished, numread={0}", numread);
+                    Logger.Log("read finished, numread={0}", numread);
                     if (numread == 0)
                     {
                         if (to_read == 0)
@@ -181,8 +185,8 @@ namespace Hat.NET
                 }
                 ms.Seek(0, SeekOrigin.Begin);
             }
-            Console.WriteLine("get post data end");
-            Console.WriteLine("POST");
+            Logger.Log("get post data end");
+            Logger.Log("POST");
             srv.handlePOSTRequest(this, new StreamReader(ms));
 
         }
@@ -225,12 +229,10 @@ namespace Hat.NET
 
         public void listen()
         {
-            Console.WriteLine("listening");
             listener = new TcpListener(port);
             listener.Start();
             while (is_active)
             {
-                Console.WriteLine(is_active);
                 TcpClient s = listener.AcceptTcpClient();
                 HttpProcessor processor = new HttpProcessor(s, this);
                 Thread thread = new Thread(new ThreadStart(processor.process));
@@ -241,8 +243,16 @@ namespace Hat.NET
 
         public void handleGETRequest(HttpProcessor p)
         {
-            Console.WriteLine("request: {0}", p.http_url);
-            Console.WriteLine(Path.GetExtension(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Length == 1 ? "index" : p.http_url.Substring(1))));
+            Logger.Log(string.Format("request: {0}", p.http_url));
+            Logger.Log(Path.GetExtension(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Length == 1 ? "index" : p.http_url.Substring(1))));
+            if(p.http_url.Replace("/", "") == "console")
+            {
+                p.writeSuccess("text/plain");
+                Logger.ViewLog(p.outputStream);
+                p.outputStream.Flush();
+                Logger.SaveLog();
+                return;
+            }
             //If file doesn't exist try trying it as a folder
             if(Directory.Exists(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Length == 1 ? "" : p.http_url.Substring(1))) && !File.Exists(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Length == 1 ? "" : p.http_url.Substring(1))))
             {
@@ -322,10 +332,11 @@ namespace Hat.NET
                     p.outputStream.Flush();
                     break;
             }
+            Logger.SaveLog();
         }
         public void handlePOSTRequest(HttpProcessor p, StreamReader inputData)
         {
-            Console.WriteLine("POST request: {0}", p.http_url);
+            Console.WriteLine(string.Format("POST request: {0}", p.http_url));
             string data = inputData.ReadToEnd();
 
             p.writeSuccess();
