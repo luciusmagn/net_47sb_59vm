@@ -339,7 +339,7 @@ namespace Hat.NET
     }
     public class Program
     {
-        public static bool Talkative = false;
+        public static bool Verbose = false;
         public static event EventHandler<HandledEventArgs> Exit = delegate { };
         public static int Main(string[] args)
         {

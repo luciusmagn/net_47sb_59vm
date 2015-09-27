@@ -50,14 +50,14 @@ namespace Hat.NET
             FullLog.Append("[" + DateTime.Now.ToLongTimeString() + "]");
             foreach (object arg in args)
             {
-                if (Program.Talkative)
+                if (Program.Verbose)
                 {
                     Console.Write(arg);
                 }
                 LogContent.Append(arg);
                 FullLog.Append(arg);
             }
-            if (Program.Talkative)
+            if (Program.Verbose)
             {
                 Console.WriteLine();
             }

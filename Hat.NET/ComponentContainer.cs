@@ -17,7 +17,7 @@ using System;
 
 namespace Hat.NET
 {
-    public class ExtensionContainer : IDisposable
+    public class ComponentContainer : IDisposable
     {
         public HatComponent Extension
         {
@@ -36,12 +36,12 @@ namespace Hat.NET
             set;
         }
 
-        public ExtensionContainer(HatComponent extension)
+        public ComponentContainer(HatComponent extension)
             : this(extension, true)
         {
         }
 
-        public ExtensionContainer(HatComponent plugin, bool dll)
+        public ComponentContainer(HatComponent plugin, bool dll)
         {
             this.Extension = plugin;
             this.Initialized = false;
@@ -50,7 +50,6 @@ namespace Hat.NET
 
         public void Initialize()
         {
-            Console.WriteLine("Initialized");
             this.Extension.Initialize();
             this.Initialized = true;
         }
