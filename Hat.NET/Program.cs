@@ -245,6 +245,10 @@ namespace Hat.NET
         {
             Logger.Log(string.Format("request: {0}", p.http_url));
             Logger.Log(Path.GetExtension(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Length == 1 ? "index" : p.http_url.Substring(1))));
+            if(Interaction.Interaction.Hooks(p))
+            {
+                return;
+            }
             if (Interaction.Interaction.TryName(p.http_url, p))
             {
                 return;
