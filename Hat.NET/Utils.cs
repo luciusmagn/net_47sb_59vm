@@ -130,8 +130,11 @@ namespace Hat.NET
                             tempstr += ch;
                         }
                         break;
-
                 }
+            }
+            if(tempstr != "")
+            {
+                temp.Add(tempstr);
             }
             return temp;
         }
@@ -157,7 +160,7 @@ namespace Hat.NET
             return string.Format("<!DOCTYPE HTML>\n<html>\n<head>{0}</head>\n<body>{1}</body>\n</html>", head, body);
         }
     }
-    public static class StringUtils
+    public static class TextUtils
     {
         public static string WriteHTMLStub(this string source, string head = "")
         {

@@ -339,10 +339,26 @@ namespace Hat.NET
     public class Program
     {
         public static bool Verbose = false;
+        public static Main cfg = new Main();
         public static event EventHandler<HandledEventArgs> Exit = delegate { };
         public static int Main(string[] args)
         {
             HttpServer httpServer;
+            if (!Directory.Exists(Path.Combine(Environment.CurrentDirectory, "configs")))
+            {
+                Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, "configs"));
+            }
+            if (!File.Exists(Path.Combine(Environment.CurrentDirectory, "configs/Main.cfg")))
+            {
+                NET.Main.Save(cfg);
+                cfg.Deserialize();
+                Console.WriteLine(cfg.brk);
+            }
+            else
+            {
+                cfg.Deserialize();
+                Console.WriteLine(cfg.brk);
+            }
             if(!Directory.Exists(Path.Combine(Environment.CurrentDirectory, "server")))
             {
                 Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, "server"));

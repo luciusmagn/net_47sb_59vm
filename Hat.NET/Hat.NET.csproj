@@ -35,6 +35,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -46,6 +48,7 @@
     <Compile Include="ApiVersion.cs" />
     <Compile Include="ComponentContainer.cs" />
     <Compile Include="ComponentLoader.cs" />
+    <Compile Include="Config.cs" />
     <Compile Include="HatComponent.cs" />
     <Compile Include="Interaction.cs" />
     <Compile Include="Logger.cs" />
