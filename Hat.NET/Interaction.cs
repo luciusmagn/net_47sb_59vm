@@ -34,7 +34,7 @@ namespace Hat.NET.Interaction
 
         public static bool TryExtension(string ext, HttpProcessor p, string name = "")
         {
-            name = p.http_url;
+            name = (name == "" ? Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Substring(1)) : name);
             bool flag = false;
             HandleHaltArgs args = new HandleHaltArgs();
             foreach(ValuePair<string, Hook> pair in ExtensionHooks)
@@ -48,12 +48,11 @@ namespace Hat.NET.Interaction
             return flag;
         }
 
-        public static bool TryName(string request, HttpProcessor p, string name = "")
+        public static bool TryName(string request, HttpProcessor p)
         {
-            name = p.http_url;
             bool flag = false;
             HandleHaltArgs args = new HandleHaltArgs();
-            foreach (ValuePair<string, Hook> pair in ExtensionHooks)
+            foreach (ValuePair<string, Hook> pair in NameHooks)
             {
                 if ((request.StartsWith("/") ? request.Substring(1) : request) == (pair.LeftValue.StartsWith("/") ? pair.LeftValue.Substring(1) : pair.LeftValue))
                 {
@@ -96,9 +95,11 @@ namespace Hat.NET.Interaction
     {
         public static void HTML(string filename, HttpProcessor processor, HandleHaltArgs e)
         {
+            System.Console.WriteLine("HTML");
             if (!e.Handled)
             {
                 processor.writeSuccess();
+                System.Console.WriteLine(filename);
                 processor.outputStream.Write(File.ReadAllText(filename));
                 processor.outputStream.Flush();
             }

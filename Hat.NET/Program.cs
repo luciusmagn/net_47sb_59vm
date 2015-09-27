@@ -256,16 +256,7 @@ namespace Hat.NET
             //If file doesn't exist try trying it as a folder
             if (Directory.Exists(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Length == 1 ? "" : p.http_url.Substring(1))) && !File.Exists(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Length == 1 ? "" : p.http_url.Substring(1))))
             {
-                p.http_url += "/";
-            }
-            //if everything else fails, try 404
-            else if (!Directory.Exists(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Length == 1 ? "" : p.http_url.Substring(1))) && !File.Exists(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Length == 1 ? "" : p.http_url.Substring(1))))
-            {
-                handle404(p);
-                return;
-            }
-            if (Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url).EndsWith("/"))
-            {
+                p.http_url += (p.http_url == "/" ? "" : "/");
                 Logger.Log(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url));
                 string[] files = Directory.GetFiles(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), (p.http_url.Length == 1 ? "" : p.http_url.Substring(1))));
                 bool flag = false;
@@ -273,11 +264,13 @@ namespace Hat.NET
                 {
                     if (Path.GetFileName(filename).Contains("index"))
                     {
-                        if (!Interaction.Interaction.TryExtension(Path.GetExtension(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Substring(1))), p))
+                        Console.WriteLine(filename);
+                        if (!Interaction.Interaction.TryExtension(Path.GetExtension(filename), p, filename))
                         {
                             p.writeSuccess("text/plain");
-                            p.outputStream.Write(File.ReadAllText(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Substring(1))));
+                            p.outputStream.Write("banana"/*File.ReadAllText(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Substring(1)))*/);
                             p.outputStream.Flush();
+                            return;
                         }
                         else
                         {
@@ -299,6 +292,12 @@ namespace Hat.NET
                     p.outputStream.Flush();
                     return;
                 }
+                return;
+            }
+            //if everything else fails, try 404
+            else if (!Directory.Exists(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Length == 1 ? "" : p.http_url.Substring(1))) && !File.Exists(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Length == 1 ? "" : p.http_url.Substring(1))))
+            {
+                handle404(p);
                 return;
             }
             if (!Interaction.Interaction.TryExtension(Path.GetExtension(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Substring(1))), p))
