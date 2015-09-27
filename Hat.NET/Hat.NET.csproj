@@ -43,8 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interaction.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Utils.cs" />
+    <Compile Include="ValuePair.cs" />
     <Compile Include="WCParser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

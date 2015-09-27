@@ -245,61 +245,39 @@ namespace Hat.NET
         {
             Logger.Log(string.Format("request: {0}", p.http_url));
             Logger.Log(Path.GetExtension(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Length == 1 ? "index" : p.http_url.Substring(1))));
-            if(p.http_url.Replace("/", "") == "console")
+            if (Interaction.Interaction.TryName(p.http_url, p))
             {
-                p.writeSuccess("text/plain");
-                Logger.ViewLog(p.outputStream);
-                p.outputStream.Flush();
-                Logger.SaveLog();
                 return;
             }
             //If file doesn't exist try trying it as a folder
-            if(Directory.Exists(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Length == 1 ? "" : p.http_url.Substring(1))) && !File.Exists(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Length == 1 ? "" : p.http_url.Substring(1))))
+            if (Directory.Exists(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Length == 1 ? "" : p.http_url.Substring(1))) && !File.Exists(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Length == 1 ? "" : p.http_url.Substring(1))))
             {
                 p.http_url += "/";
             }
             //if everything else fails, try 404
-            else if(!Directory.Exists(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Length == 1 ? "" : p.http_url.Substring(1))) && !File.Exists(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Length == 1 ? "" : p.http_url.Substring(1))))
+            else if (!Directory.Exists(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Length == 1 ? "" : p.http_url.Substring(1))) && !File.Exists(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Length == 1 ? "" : p.http_url.Substring(1))))
             {
                 handle404(p);
                 return;
             }
-            if(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url).EndsWith("/"))
+            if (Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url).EndsWith("/"))
             {
                 Logger.Log(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url));
                 string[] files = Directory.GetFiles(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), (p.http_url.Length == 1 ? "" : p.http_url.Substring(1))));
                 bool flag = false;
-                foreach(string filename in files)
+                foreach (string filename in files)
                 {
-                    if(Path.GetFileName(filename).Contains("index"))
+                    if (Path.GetFileName(filename).Contains("index"))
                     {
-                        switch (Path.GetExtension(filename))
+                        if (!Interaction.Interaction.TryExtension(Path.GetExtension(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Substring(1))), p))
                         {
-                            case ".png":
-                                Console.WriteLine("picture");
-                                Console.WriteLine(filename);
-                                Stream fs = File.Open(filename, FileMode.Open);
-                                p.writeSuccess("image/png");
-                                fs.CopyTo(p.outputStream.BaseStream);
-                                p.outputStream.BaseStream.Flush();
-                                flag = true;
-                                break;
-                            case ".wc":
-                                WCParser.Parse(File.ReadAllText(filename), p.outputStream);
-                                flag = true;
-                                break;
-                            case ".css":
-                                flag = true;
-                                p.writeSuccess("text/css");
-                                p.outputStream.Write(File.ReadAllText(filename));
-                                p.outputStream.Flush();
-                                break;
-                            default:
-                                flag = true;
-                                p.writeSuccess();
-                                p.outputStream.Write(File.ReadAllText(filename));
-                                p.outputStream.Flush();
-                                break;
+                            p.writeSuccess("text/plain");
+                            p.outputStream.Write(File.ReadAllText(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Substring(1))));
+                            p.outputStream.Flush();
+                        }
+                        else
+                        {
+                            flag = true;
                         }
                         break;
                     }
@@ -308,7 +286,7 @@ namespace Hat.NET
                 {
                     StringBuilder sb = new StringBuilder();
                     sb.AppendLine("<a href=\"../\">../</a><br>");
-                    foreach(string file in files)
+                    foreach (string file in files)
                     {
                         sb.AppendLine(string.Format("<a href=\"{0}\">{0}</a><br>", file.Replace(Path.Combine(Environment.CurrentDirectory, "server"), "")));
                     }
@@ -319,29 +297,11 @@ namespace Hat.NET
                 }
                 return;
             }
-            switch (Path.GetExtension(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Substring(1))))
+            if (!Interaction.Interaction.TryExtension(Path.GetExtension(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Substring(1))), p))
             {
-                case ".png":
-                    Logger.Log("picture");
-                    Logger.Log(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Substring(1)));
-                    Stream fs = File.Open(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Substring(1)), FileMode.Open);
-                    p.writeSuccess("image/png");
-                    fs.CopyTo(p.outputStream.BaseStream);
-                    p.outputStream.BaseStream.Flush();
-                    break;
-                case ".wc":
-                    WCParser.Parse(File.ReadAllText(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Substring(1))), p.outputStream);
-                    break;
-                case ".css":
-                    p.writeSuccess("text/css");
-                    p.outputStream.Write(File.ReadAllText(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Substring(1))));
-                    p.outputStream.Flush();
-                    break;
-                default:
-                    p.writeSuccess("text/plain");
-                    p.outputStream.Write(File.ReadAllText(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Substring(1))));
-                    p.outputStream.Flush();
-                    break;
+                p.writeSuccess("text/plain");
+                p.outputStream.Write(File.ReadAllText(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Substring(1))));
+                p.outputStream.Flush();
             }
             Logger.SaveLog();
         }
