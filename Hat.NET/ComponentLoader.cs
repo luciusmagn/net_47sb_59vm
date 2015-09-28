@@ -28,7 +28,7 @@ namespace Hat.NET
 {
     public static class ComponentLoader
     {
-        public const string ExtensionsPath = "servercomponents";
+        public static readonly string ExtensionsPath = Program.cfg.componentspath;
         private static readonly Dictionary<string, Assembly> loadedAssemblies = new Dictionary<string, Assembly>();
         private static readonly List<ComponentContainer> extensions = new List<ComponentContainer>();
         public static string ExtensionsDirectoryPath

@@ -344,29 +344,7 @@ namespace Hat.NET
         public static int Main(string[] args)
         {
             HttpServer httpServer;
-            if (!Directory.Exists(Path.Combine(Environment.CurrentDirectory, "configs")))
-            {
-                Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, "configs"));
-            }
-            if (!File.Exists(Path.Combine(Environment.CurrentDirectory, "configs/Main.cfg")))
-            {
-                NET.Main.Save(cfg);
-                cfg.Deserialize();
-                Console.WriteLine(cfg.brk);
-            }
-            else
-            {
-                cfg.Deserialize();
-                Console.WriteLine(cfg.brk);
-            }
-            if(!Directory.Exists(Path.Combine(Environment.CurrentDirectory, "server")))
-            {
-                Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, "server"));
-            }
-            if(!File.Exists(Path.Combine(Environment.CurrentDirectory, "server/404")))
-            {
-                File.WriteAllText(Path.Combine(Environment.CurrentDirectory, "server/404"), "<h1>404 - Not found</h1><br><h5>__________________________________________________________________<br>Hat.NET - an opensource .NET webserver software</h5>".WriteHTMLStub());
-            }
+            PerformFileCheck();
             ComponentLoader.Initialize();
             if (args.GetLength(0) > 0)
             {
@@ -375,12 +353,38 @@ namespace Hat.NET
             }
             else
             {
-                httpServer = new HttpServer(8080);
-                Console.WriteLine("Listening on port 8080");
+                httpServer = new HttpServer(cfg.defaultport);
+                Console.WriteLine("Listening on port " + cfg.defaultport.ToString());
             }
             Thread thread = new Thread(new ThreadStart(httpServer.listen));
             thread.Start();
             return 0;
+        }
+
+        public static void PerformFileCheck()
+        {
+            if (!Directory.Exists(Path.Combine(Environment.CurrentDirectory, "configs")))
+            {
+                Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, "configs"));
+            }
+            if (!File.Exists(Path.Combine(Environment.CurrentDirectory, "configs/Main.cfg")))
+            {
+                Config.Save(cfg);
+                cfg.Deserialize();
+            }
+            else
+            {
+                cfg.Deserialize();
+            }
+            Verbose = cfg.verbose;
+            if (!Directory.Exists(Path.Combine(Environment.CurrentDirectory, cfg.codepath)))
+            {
+                Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, cfg.codepath));
+            }
+            if (!File.Exists(Path.Combine(Environment.CurrentDirectory, "server/404")))
+            {
+                File.WriteAllText(Path.Combine(Environment.CurrentDirectory, "server/404"), "<h1>404 - Not found</h1><br><h5>__________________________________________________________________<br>Hat.NET - an opensource .NET webserver software</h5>".WriteHTMLStub());
+            }
         }
 
     }
