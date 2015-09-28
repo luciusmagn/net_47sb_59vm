@@ -24,13 +24,13 @@ namespace Hat.NET
         private Stream inputStream;
         public StreamWriter outputStream;
 
-        public String http_method;
-        public String http_url;
-        public String http_protocol_versionstring;
+        public string http_method;
+        public string http_url;
+        public string http_protocol_versionstring;
         public Hashtable httpHeaders = new Hashtable();
 
 
-        private static int MAX_POST_SIZE = 10 * 1024 * 1024; // 10MB
+        public static int MAX_POST_SIZE = 10 * 1024 * 1024; // 10MB
 
         public HttpProcessor(TcpClient s, HttpServer srv)
         {
@@ -152,13 +152,13 @@ namespace Hat.NET
             Logger.Log("get post data start");
             int content_len = 0;
             MemoryStream ms = new MemoryStream();
-            if (this.httpHeaders.ContainsKey("Content-Length"))
+            if (httpHeaders.ContainsKey("Content-Length"))
             {
-                content_len = Convert.ToInt32(this.httpHeaders["Content-Length"]);
+                content_len = Convert.ToInt32(httpHeaders["Content-Length"]);
                 if (content_len > MAX_POST_SIZE)
                 {
                     throw new Exception(
-                        String.Format("POST Content-Length({0}) too big for this simple server",
+                        string.Format("POST Content-Length({0}) too big for this server",
                           content_len));
                 }
                 byte[] buf = new byte[BUF_SIZE];
@@ -167,7 +167,7 @@ namespace Hat.NET
                 {
                     Logger.Log("starting Read, to_read={0}", to_read);
 
-                    int numread = this.inputStream.Read(buf, 0, Math.Min(BUF_SIZE, to_read));
+                    int numread = inputStream.Read(buf, 0, Math.Min(BUF_SIZE, to_read));
                     Logger.Log("read finished, numread={0}", numread);
                     if (numread == 0)
                     {
@@ -244,7 +244,6 @@ namespace Hat.NET
         public void handleGETRequest(HttpProcessor p)
         {
             Logger.Log(string.Format("request: {0}", p.http_url));
-            Logger.Log(Path.GetExtension(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Length == 1 ? "index" : p.http_url.Substring(1))));
             if(Interaction.Interaction.Hooks(p))
             {
                 return;
@@ -262,6 +261,7 @@ namespace Hat.NET
                 bool flag = false;
                 foreach (string filename in files)
                 {
+                    //We need to find an index. But we don't need to send more than one at a time
                     if (Path.GetFileName(filename).Contains("index"))
                     {
                         Console.WriteLine(filename);
@@ -375,8 +375,11 @@ namespace Hat.NET
             else
             {
                 cfg.Deserialize();
+                //Auto-add missing values
+                Config.Save(cfg);
             }
             Verbose = cfg.verbose;
+            HttpProcessor.MAX_POST_SIZE = cfg.maxPOSTmb * 1024 * 1024;
             if (!Directory.Exists(Path.Combine(Environment.CurrentDirectory, cfg.codepath)))
             {
                 Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, cfg.codepath));

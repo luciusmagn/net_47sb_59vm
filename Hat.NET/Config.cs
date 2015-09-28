@@ -119,5 +119,6 @@ namespace Hat.NET
         public string componentspath = "servercomponents";
         public int defaultport = 8080;
         public bool verbose = false;
+        public int maxPOSTmb = 10;
     }
 }

@@ -81,6 +81,25 @@ namespace Hat.NET.Interaction
             }
             return flag;
         }
+
+        public static bool POST(HttpProcessor p)
+        {
+            bool flag = false;
+            HandleHaltArgs args = new HandleHaltArgs();
+            foreach (Hook hook in POSTHooks)
+            {
+                hook(p.http_url, p, args);
+                if (args.Halt)
+                {
+                    break;
+                }
+                if (args.PreventDefault)
+                {
+                    flag = true;
+                }
+            }
+            return flag;
+        }
         static Interaction()
         {
             ExtensionHooks.Add(new ValuePair<string, Hook>(".htm", CommonDelegates.HTML));
