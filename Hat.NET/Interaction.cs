@@ -39,7 +39,7 @@ namespace Hat.NET.Interaction
             HandleHaltArgs args = new HandleHaltArgs();
             foreach(ValuePair<string, Hook> pair in ExtensionHooks)
             {
-                if (ext.Replace(".", "") == pair.LeftValue.Replace(".", ""))
+                if (ext.Replace(".", "").ToLower() == pair.LeftValue.Replace(".", "").ToLower())
                 {
                     pair.RightValue(name, p, args);
                     flag = true;
@@ -102,68 +102,51 @@ namespace Hat.NET.Interaction
         }
         static Interaction()
         {
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".htm", CommonDelegates.HTML));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".html", CommonDelegates.HTML));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".png", CommonDelegates.PNG));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".css", CommonDelegates.CSS));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".wc", CommonDelegates.WC));
-            NameHooks.Add(new ValuePair<string, Hook>("/console", CommonDelegates.Console));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".png", ImageDelegates.PNG));
+
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".htm", TextDelegates.HTML));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".html", TextDelegates.HTML));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".css", TextDelegates.CSS));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".wc", TextDelegates.WC));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".s", TextDelegates.S));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".par", TextDelegates.PAR));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".csv", TextDelegates.CSV));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".n3", TextDelegates.N3));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".ics", TextDelegates.ICS));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".txt", TextDelegates.TXT));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".dsc", TextDelegates.DSC));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".rtx", TextDelegates.RTX));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".sgml", TextDelegates.SGML));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".tsv", TextDelegates.TSV));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".t", TextDelegates.T));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".ttl", TextDelegates.TTL));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".uri", TextDelegates.URI)); 
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".curl", TextDelegates.CURL));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".dcurl", TextDelegates.DCURL));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".mcurl", TextDelegates.MCURL));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".scurl", TextDelegates.SCURL));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".fly", TextDelegates.FLY));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".flx", TextDelegates.FLX));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".gv", TextDelegates.GV));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".3dml", TextDelegates._3DML));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".spot", TextDelegates.SPOT));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".jad", TextDelegates.JAD));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".wml", TextDelegates.WML));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".wmls", TextDelegates.WMLS));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".c", TextDelegates.C));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".f", TextDelegates.F));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".java", TextDelegates.JAVA));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".p", TextDelegates.P));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".etx", TextDelegates.ETX));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".vcs", TextDelegates.VCS));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".uu", TextDelegates.UU));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".vcf", TextDelegates.VCF));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".yaml", TextDelegates.YAML));
+
+            NameHooks.Add(new ValuePair<string, Hook>("/console", RequestDelegates.Console));
         }
     }
-    public static class CommonDelegates
-    {
-        public static void HTML(string filename, HttpProcessor processor, HandleHaltArgs e)
-        {
-            System.Console.WriteLine("HTML");
-            if (!e.Handled)
-            {
-                processor.writeSuccess();
-                System.Console.WriteLine(filename);
-                processor.outputStream.Write(File.ReadAllText(filename));
-                processor.outputStream.Flush();
-            }
-        }
-
-        public static void PNG(string filename, HttpProcessor processor, HandleHaltArgs e)
-        {
-            if (!e.Handled)
-            {
-                Logger.Log("picture");
-                Logger.Log(filename);
-                Stream fs = File.Open(filename, FileMode.Open);
-                processor.writeSuccess("image/png");
-                fs.CopyTo(processor.outputStream.BaseStream);
-                processor.outputStream.BaseStream.Flush();
-            }
-        }
-
-        public static void CSS(string filename, HttpProcessor processor, HandleHaltArgs e)
-        {
-            if (!e.Handled)
-            {
-                processor.writeSuccess("text/css");
-                processor.outputStream.Write(File.ReadAllText(filename));
-                processor.outputStream.Flush();
-            }
-        }
-
-        public static void WC(string filename, HttpProcessor processor, HandleHaltArgs e)
-        {
-            if (!e.Handled)
-            {
-                WCParser.Parse(File.ReadAllText(filename), processor.outputStream);
-            }
-        }
-
-        public static void Console(string fileName, HttpProcessor processor, HandleHaltArgs e)
-        {
-            processor.writeSuccess("text/plain");
-            Logger.ViewLog(processor.outputStream);
-            processor.outputStream.Flush();
-            Logger.SaveLog();
-            return;
-        }
-    }
+    
     [HostProtection(SecurityAction.LinkDemand, SharedState = true)]
     public class HandleHaltArgs : HandledEventArgs
     {
