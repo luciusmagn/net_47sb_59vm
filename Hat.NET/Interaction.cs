@@ -143,6 +143,21 @@ namespace Hat.NET.Interaction
             ExtensionHooks.Add(new ValuePair<string, Hook>(".vcf", TextDelegates.VCF));
             ExtensionHooks.Add(new ValuePair<string, Hook>(".yaml", TextDelegates.YAML));
 
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".exe", AppDelegates.OCTET_STREAM));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".bin", AppDelegates.OCTET_STREAM));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".arc", AppDelegates.OCTET_STREAM));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".arj", AppDelegates.OCTET_STREAM));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".com", AppDelegates.OCTET_STREAM));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".dump", AppDelegates.OCTET_STREAM));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".lha", AppDelegates.OCTET_STREAM));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".lhx", AppDelegates.OCTET_STREAM));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".lzh", AppDelegates.OCTET_STREAM));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".lzx", AppDelegates.OCTET_STREAM));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".psd", AppDelegates.OCTET_STREAM));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".saveme", AppDelegates.OCTET_STREAM));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".uu", AppDelegates.OCTET_STREAM));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".zoo", AppDelegates.OCTET_STREAM));
+
             NameHooks.Add(new ValuePair<string, Hook>("/console", RequestDelegates.Console));
         }
     }

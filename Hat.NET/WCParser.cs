@@ -36,14 +36,14 @@ namespace Hat.NET
                     UsingQuery.Add(string.Format("<{0} {1}={2} {3}={4}>", 
                         (mode == What.CSS ? "link" : (mode == What.JS ? "script" : "link")), 
                         (mode == What.CSS ? "rel" : (mode == What.JS ? "type" : "rel")), 
-                        (mode == What.CSS ? "stylesheet" : (mode == What.JS ? "text/javascript" : "text/text")), 
+                        (mode == What.CSS ? "stylesheet" : (mode == What.JS ? "text/javascript" : "text/css")), 
                         (mode == What.CSS ? "href" : (mode == What.JS ? "src" : "href")), 
                         statement.RemoveIndent().Substring(6)
                     ));
                     Console.WriteLine(string.Format("<{0} {1}={2} {3}={4}>",
                         (mode == What.CSS ? "link" : (mode == What.JS ? "script" : "link")),
                         (mode == What.CSS ? "rel" : (mode == What.JS ? "type" : "rel")),
-                        (mode == What.CSS ? "stylesheet" : (mode == What.JS ? "text/javascript" : "text/text")),
+                        (mode == What.CSS ? "stylesheet" : (mode == What.JS ? "text/javascript" : "text/css")),
                         (mode == What.CSS ? "href" : (mode == What.JS ? "src" : "href")),
                         statement.RemoveIndent().Substring(6)
                     ));

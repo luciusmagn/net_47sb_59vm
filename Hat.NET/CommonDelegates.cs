@@ -451,4 +451,20 @@ namespace Hat.NET
             }
         }
     }
+
+    //For those with content-type that start with application/
+    public static class AppDelegates
+    {
+        //Used for just too many, hence the different naming.
+        public static void OCTET_STREAM(string filename, HttpProcessor processor, HandleHaltArgs e)
+        {
+            if (!e.Handled)
+            {
+                Stream fs = File.Open(filename, FileMode.Open);
+                processor.writeSuccess("aplication/octet-stream");
+                fs.CopyTo(processor.outputStream.BaseStream);
+                processor.outputStream.BaseStream.Flush();
+            }
+        }
+    }
 }
