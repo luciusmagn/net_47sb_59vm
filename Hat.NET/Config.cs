@@ -110,7 +110,30 @@ namespace Hat.NET
                 }
             }
             catch { }
-        } 
+        }
+
+        public Config()
+        {
+
+        }
+
+        public Config(bool autoload)
+        {
+            if (autoload)
+            {
+                if (!File.Exists(Path.Combine(Environment.CurrentDirectory, string.Format("configs/{0}.cfg", this.GetType().Name))))
+                {
+                    Config.Save(this);
+                    this.Deserialize();
+                }
+                else
+                {
+                    this.Deserialize();
+                    //Auto-add missing values
+                    Config.Save(this);
+                }
+            }
+        }
     }
 
     public class Main : Config

@@ -106,7 +106,6 @@ namespace Hat.NET
 
         public void readHeaders()
         {
-            Logger.Log("readHeaders()");
             string line;
             while ((line = streamReadLine(inputStream)) != null)
             {
@@ -195,8 +194,9 @@ namespace Hat.NET
         {
             // this is the successful HTTP response line
             outputStream.WriteLine("HTTP/1.0 200 OK");
+            outputStream.WriteLine("Content-Language: cs");
             // these are the HTTP headers...          
-            outputStream.WriteLine("Content-Type: " + content_type);
+            outputStream.WriteLine("Content-Type: " + content_type + "; charset=UTF-8" );
             outputStream.WriteLine("Connection: close");
             // ..add your own headers here if you like
 

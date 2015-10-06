@@ -159,6 +159,8 @@ namespace Hat.NET.Interaction
             ExtensionHooks.Add(new ValuePair<string, Hook>(".zoo", AppDelegates.OCTET_STREAM));
 
             NameHooks.Add(new ValuePair<string, Hook>("/console", RequestDelegates.Console));
+
+            GeneralHooks.Add(SubdomainService.EntryHook);
         }
     }
     
