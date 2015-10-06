@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Hat.NET
@@ -10,7 +11,7 @@ namespace Hat.NET
     /// <summary>
     /// Halcyon logger. Handles logging and saving logs to a file.
     /// </summary>
-    public static class Logger
+    public class Logger
     {
         private static bool _Initiated = false;
         public static bool Initiated
@@ -18,8 +19,8 @@ namespace Hat.NET
             get { return _Initiated; }
             private set { _Initiated = value; }
         }
-        public static StringBuilder LogContent = new StringBuilder();
-        public static StringBuilder FullLog = new StringBuilder();
+        public volatile static StringBuilder LogContent = new StringBuilder();
+        public volatile static StringBuilder FullLog = new StringBuilder();
         public static string LogName = "Hat.log";
 
         /// <summary>
@@ -104,7 +105,7 @@ namespace Hat.NET
 
         public static void ProgramExit(object sender, System.ComponentModel.HandledEventArgs e)
         {
-            SaveLog();
+            Save();
         }
         /// <summary>
         /// Saves what log got so far.
@@ -157,6 +158,30 @@ namespace Hat.NET
         public static void ViewLog(StreamWriter p)
         {
             p.WriteLine(FullLog.ToString());
+        }
+
+        public void LogWorker()
+        {
+            Logger.TalkyLog("Logging worker thread has started");
+            while (true)
+            {
+                if(Program.PendingLogSave)
+                {
+                    SaveLog();
+                }
+            }
+        }
+
+        public static void Save()
+        {
+            if(Program.cfg.asynchlog)
+            {
+                Program.PendingLogSave = true;
+            }
+            else
+            {
+                Logger.SaveLog();
+            }
         }
     }
 }

@@ -120,5 +120,6 @@ namespace Hat.NET
         public int defaultport = 8080;
         public bool verbose = false;
         public int maxPOSTmb = 10;
+        public bool asynchlog = true;
     }
 }

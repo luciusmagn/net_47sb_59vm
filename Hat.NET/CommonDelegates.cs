@@ -431,7 +431,7 @@ namespace Hat.NET
             processor.writeSuccess("text/plain");
             Logger.ViewLog(processor.outputStream);
             processor.outputStream.Flush();
-            Logger.SaveLog();
+            Logger.Save();
             return;
         }
     }

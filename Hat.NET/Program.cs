@@ -306,7 +306,7 @@ namespace Hat.NET
                 p.outputStream.Write(File.ReadAllText(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Substring(1))));
                 p.outputStream.Flush();
             }
-            Logger.SaveLog();
+            Logger.Save();
         }
         public void handlePOSTRequest(HttpProcessor p, StreamReader inputData)
         {
@@ -341,6 +341,8 @@ namespace Hat.NET
         public static bool Verbose = false;
         public static Main cfg = new Main();
         public static event EventHandler<HandledEventArgs> Exit = delegate { };
+        public volatile static bool PendingLogSave = false;
+        public static Thread Logger;
         public static int Main(string[] args)
         {
             HttpServer httpServer;
@@ -356,6 +358,8 @@ namespace Hat.NET
                 httpServer = new HttpServer(cfg.defaultport);
                 Console.WriteLine("Listening on port " + cfg.defaultport.ToString());
             }
+            Thread worker = new Thread(new ThreadStart(new Logger().LogWorker));
+            worker.Start();
             Thread thread = new Thread(new ThreadStart(httpServer.listen));
             thread.Start();
             return 0;
@@ -389,7 +393,5 @@ namespace Hat.NET
                 File.WriteAllText(Path.Combine(Environment.CurrentDirectory, "server/404"), "<h1>404 - Not found</h1><br><h5>__________________________________________________________________<br>Hat.NET - an opensource .NET webserver software</h5>".WriteHTMLStub());
             }
         }
-
     }
-
 }

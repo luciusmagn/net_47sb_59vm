@@ -51,6 +51,7 @@
     <Compile Include="ComponentLoader.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="HatComponent.cs" />
+    <Compile Include="HttpInfo.cs" />
     <Compile Include="Interaction.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Utils.cs" />
