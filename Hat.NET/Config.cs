@@ -140,9 +140,10 @@ namespace Hat.NET
     {
         public string codepath = "server";
         public string componentspath = "servercomponents";
-        public int defaultport = 8080;
+        public int defaultport = 80;
         public bool verbose = false;
         public int maxPOSTmb = 10;
         public bool asynchlog = true;
+        public string charset = "utf-8";
     }
 }

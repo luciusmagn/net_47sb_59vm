@@ -196,7 +196,7 @@ namespace Hat.NET
             outputStream.WriteLine("HTTP/1.0 200 OK");
             outputStream.WriteLine("Content-Language: cs");
             // these are the HTTP headers...          
-            outputStream.WriteLine("Content-Type: " + content_type + "; charset=UTF-8" );
+            outputStream.WriteLine("Content-Type: " + content_type + string.Format("; charset={0}", Program.cfg.charset));
             outputStream.WriteLine("Connection: close");
             // ..add your own headers here if you like
 
