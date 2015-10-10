@@ -20,31 +20,31 @@ namespace Hat.NET
             {
                 if(statement.RemoveIndent().StartsWith("using"))
                 {
-                    What mode = new What();
+                    AttributeType mode = new AttributeType();
                     switch(Path.GetExtension(statement.RemoveIndent().Substring(6)))
                     {
                         case "js":
-                            mode = What.JS;
+                            mode = AttributeType.JS;
                             break;
                         case "css":
-                            mode = What.CSS;
+                            mode = AttributeType.CSS;
                             break;
                         default:
-                            mode = What.UNKNOWN;
+                            mode = AttributeType.UNKNOWN;
                             break;
                     }
                     UsingQuery.Add(string.Format("<{0} {1}={2} {3}={4}>", 
-                        (mode == What.CSS ? "link" : (mode == What.JS ? "script" : "link")), 
-                        (mode == What.CSS ? "rel" : (mode == What.JS ? "type" : "rel")), 
-                        (mode == What.CSS ? "stylesheet" : (mode == What.JS ? "text/javascript" : "text/css")), 
-                        (mode == What.CSS ? "href" : (mode == What.JS ? "src" : "href")), 
+                        (mode == AttributeType.CSS ? "link" : (mode == AttributeType.JS ? "script" : "link")), 
+                        (mode == AttributeType.CSS ? "rel" : (mode == AttributeType.JS ? "type" : "rel")), 
+                        (mode == AttributeType.CSS ? "stylesheet" : (mode == AttributeType.JS ? "text/javascript" : "text/css")), 
+                        (mode == AttributeType.CSS ? "href" : (mode == AttributeType.JS ? "src" : "href")), 
                         statement.RemoveIndent().Substring(6)
                     ));
                     Console.WriteLine(string.Format("<{0} {1}={2} {3}={4}>",
-                        (mode == What.CSS ? "link" : (mode == What.JS ? "script" : "link")),
-                        (mode == What.CSS ? "rel" : (mode == What.JS ? "type" : "rel")),
-                        (mode == What.CSS ? "stylesheet" : (mode == What.JS ? "text/javascript" : "text/css")),
-                        (mode == What.CSS ? "href" : (mode == What.JS ? "src" : "href")),
+                        (mode == AttributeType.CSS ? "link" : (mode == AttributeType.JS ? "script" : "link")),
+                        (mode == AttributeType.CSS ? "rel" : (mode == AttributeType.JS ? "type" : "rel")),
+                        (mode == AttributeType.CSS ? "stylesheet" : (mode == AttributeType.JS ? "text/javascript" : "text/css")),
+                        (mode == AttributeType.CSS ? "href" : (mode == AttributeType.JS ? "src" : "href")),
                         statement.RemoveIndent().Substring(6)
                     ));
                 }

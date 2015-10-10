@@ -167,7 +167,7 @@ namespace Hat.NET
             return string.Format("<!DOCTYPE HTML>\n<html>\n<head>{0}</head>\n<body>{1}</body>\n</html>", head, source);
         }
     }
-    public enum What
+    public enum AttributeType
     {
         JS,
         CSS,

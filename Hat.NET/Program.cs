@@ -347,6 +347,7 @@ namespace Hat.NET
         {
             HttpServer httpServer;
             PerformFileCheck();
+            SubdomainService.Initialize();
             ComponentLoader.Initialize();
             if (args.GetLength(0) > 0)
             {
@@ -392,6 +393,10 @@ namespace Hat.NET
             {
                 File.WriteAllText(Path.Combine(Environment.CurrentDirectory, "server/404"), "<h1>404 - Not found</h1><br><h5>__________________________________________________________________<br>Hat.NET - an opensource .NET webserver software</h5>".WriteHTMLStub());
             }
+        }
+        public void PleaseExecuteMyScriptPlz()
+        {
+            throw new DoItYourselfImTooLazyException();
         }
     }
 }

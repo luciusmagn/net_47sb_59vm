@@ -450,6 +450,28 @@ namespace Hat.NET
                 processor.outputStream.BaseStream.Flush();
             }
         }
+
+        public static void JPEG(string fileName, HttpProcessor processor, HandleHaltArgs e)
+        {
+            if (!e.Handled)
+            {
+                Stream fs = File.Open(fileName, FileMode.Open);
+                processor.writeSuccess("image/jpeg");
+                fs.CopyTo(processor.outputStream.BaseStream);
+                processor.outputStream.BaseStream.Flush();
+            }
+        }
+
+        public static void GIF(string fileName, HttpProcessor processor, HandleHaltArgs e)
+        {
+            if (!e.Handled)
+            {
+                Stream fs = File.Open(fileName, FileMode.Open);
+                processor.writeSuccess("image/gif");
+                fs.CopyTo(processor.outputStream.BaseStream);
+                processor.outputStream.BaseStream.Flush();
+            }
+        }
     }
 
     //For those with content-type that start with application/

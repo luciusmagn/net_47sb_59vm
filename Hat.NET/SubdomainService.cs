@@ -16,18 +16,83 @@ namespace Hat.NET
         public static SubdomainService cfg = new SubdomainService();
         public static void EntryHook(string fileName, HttpProcessor processor, HandleHaltArgs e)
         {
-            if(Subdomains.ContainsValue((processor.httpHeaders["Host"] as string)))
+            string str = (string)processor.httpHeaders["Host"];
+            Console.WriteLine((str.Contains(":") ? str.Substring(0, str.IndexOf(":")) : str));
+            if (Subdomains.ContainsKey((str.Contains(":") ? str.Substring(0, str.IndexOf(":")) : str)))
             {
-
+                e.PreventDefault = true;
+                HandleRequest(processor, Subdomains[(str.Contains(":") ? str.Substring(0, str.IndexOf(":")) : str)]);
             }
         }
 
+        public static void HandleRequest(HttpProcessor p, string path)
+        {
+            if (Interaction.Interaction.TryName(p.http_url, p))
+            {
+                return;
+            }
+            //If file doesn't exist try trying it as a folder
+            if (Directory.Exists(Path.Combine(Path.Combine(Environment.CurrentDirectory, path), p.http_url.Length == 1 ? "" : p.http_url.Substring(1))) && !File.Exists(Path.Combine(Path.Combine(Environment.CurrentDirectory, path), p.http_url.Length == 1 ? "" : p.http_url.Substring(1))))
+            {
+                p.http_url += (p.http_url == "/" ? "" : "/");
+                Logger.Log(Path.Combine(Path.Combine(Environment.CurrentDirectory, path), p.http_url));
+                string[] files = Directory.GetFiles(Path.Combine(Path.Combine(Environment.CurrentDirectory, path), (p.http_url.Length == 1 ? "" : p.http_url.Substring(1))));
+                bool flag = false;
+                foreach (string filename in files)
+                {
+                    //We need to find an index. But we don't need to send more than one at a time
+                    if (Path.GetFileName(filename).Contains("index"))
+                    {
+                        Console.WriteLine(filename);
+                        if (!Interaction.Interaction.TryExtension(Path.GetExtension(filename), p, filename))
+                        {
+                            p.writeSuccess("text/plain");
+                            p.outputStream.Write(File.ReadAllText(filename));
+                            p.outputStream.Flush();
+                            return;
+                        }
+                        else
+                        {
+                            flag = true;
+                        }
+                        break;
+                    }
+                }
+                if (!flag)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    sb.AppendLine("<a href=\"../\">../</a><br>");
+                    foreach (string file in files)
+                    {
+                        sb.AppendLine(string.Format("<a href=\"{0}\">{0}</a><br>", file.Replace(Path.Combine(Environment.CurrentDirectory, path), "")));
+                    }
+                    p.outputStream.WriteLine(sb.ToString());
+                    p.writeSuccess();
+                    p.outputStream.Flush();
+                    return;
+                }
+                return;
+            }
+            //if everything else fails, try 404
+            else if (!Directory.Exists(Path.Combine(Path.Combine(Environment.CurrentDirectory, path), p.http_url.Length == 1 ? "" : p.http_url.Substring(1))) && !File.Exists(Path.Combine(Path.Combine(Environment.CurrentDirectory, path), p.http_url.Length == 1 ? "" : p.http_url.Substring(1))))
+            {
+                HttpServer.handle404(p);
+                return;
+            }
+            if (!Interaction.Interaction.TryExtension(Path.GetExtension(Path.Combine(Path.Combine(Environment.CurrentDirectory, path), p.http_url.Substring(1))), p, Path.Combine(Environment.CurrentDirectory, path, p.http_url.Substring(1))))
+            {
+                p.writeSuccess("text/plain");
+                p.outputStream.Write(File.ReadAllText(Path.Combine(Path.Combine(Environment.CurrentDirectory, path), p.http_url.Substring(1))));
+                p.outputStream.Flush();
+            }
+            Logger.Save();
+        }
         public static void Initialize()
         {
             bool isComment = false;
-            if (File.Exists(Path.Combine(Environment.CurrentDirectory, "services", "subdomains.service")))
+            if (File.Exists(Path.Combine(Environment.CurrentDirectory, "services", "service.subdomains")))
             {
-                foreach(string line in File.ReadAllLines(Path.Combine(Environment.CurrentDirectory, "services", "subdomains.service")))
+                foreach(string line in File.ReadAllLines(Path.Combine(Environment.CurrentDirectory, "services", "service.subdomains")))
                 {
                     if(line.Replace(" ", "").StartsWith("/*"))
                         isComment = true;
@@ -38,6 +103,23 @@ namespace Hat.NET
                         Subdomains.Add(line.Split(new char[] { '=' })[0], string.Join("", line.Split(new char[] { '=' }).Skip(1)));
                     }
                 }
+            }
+            else
+            {
+                Logger.Log("subdomains file not found. Generating again");
+                if(!Directory.Exists(Path.Combine(Environment.CurrentDirectory, "services")))
+                {
+                    Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, "services"));
+                }
+                File.WriteAllText(Path.Combine(Environment.CurrentDirectory, "services", "service.subdomains"),
+                    @"#This is the file for configurations of subdomains
+#It should follow this syntax:
+#   1. One entry per line;
+#   2. No spaces between name, = and path
+#   3. The path is relative and shouldn't start with a \\
+#example entry:
+test.localhost=banana\test
+                    ");
             }
         }
     }

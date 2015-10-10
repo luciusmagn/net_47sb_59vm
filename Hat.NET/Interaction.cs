@@ -103,7 +103,10 @@ namespace Hat.NET.Interaction
         static Interaction()
         {
             ExtensionHooks.Add(new ValuePair<string, Hook>(".png", ImageDelegates.PNG));
-
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".jpg", ImageDelegates.JPEG));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".jpeg", ImageDelegates.JPEG));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".gif", ImageDelegates.GIF));
+            
             ExtensionHooks.Add(new ValuePair<string, Hook>(".htm", TextDelegates.HTML));
             ExtensionHooks.Add(new ValuePair<string, Hook>(".html", TextDelegates.HTML));
             ExtensionHooks.Add(new ValuePair<string, Hook>(".css", TextDelegates.CSS));

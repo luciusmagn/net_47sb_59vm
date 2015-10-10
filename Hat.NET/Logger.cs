@@ -13,12 +13,6 @@ namespace Hat.NET
     /// </summary>
     public class Logger
     {
-        private static bool _Initiated = false;
-        public static bool Initiated
-        {
-            get { return _Initiated; }
-            private set { _Initiated = value; }
-        }
         public volatile static StringBuilder LogContent = new StringBuilder();
         public volatile static StringBuilder FullLog = new StringBuilder();
         public static string LogName = "Hat.log";
