@@ -106,7 +106,7 @@ namespace Hat.NET
             {
                 foreach (KeyValuePair<string, object> pair in fldlist)
                 {
-                    this.GetType().GetField(pair.Key).SetValue(this, pair.Value);
+                    GetType().GetField(pair.Key).SetValue(this, pair.Value);
                 }
             }
             catch { }
@@ -121,7 +121,7 @@ namespace Hat.NET
         {
             if (autoload)
             {
-                if (!File.Exists(Path.Combine(Environment.CurrentDirectory, string.Format("configs/{0}.cfg", this.GetType().Name))))
+                if (!File.Exists(Path.Combine(Environment.CurrentDirectory, string.Format("configs/{0}.cfg", GetType().Name))))
                 {
                     Config.Save(this);
                     this.Deserialize();

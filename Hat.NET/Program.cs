@@ -331,7 +331,7 @@ namespace Hat.NET
             else
             {
                 p.writeSuccess();
-                p.outputStream.WriteLine("<h1>404 404 - 404 Not found</h1>".WriteHTMLStub());
+                p.outputStream.WriteLine("<h1>404 404 - 404 Not found</h1>".WriteHTMLStub("<title>404</title>"));
                 p.outputStream.Flush();
             }
         }
@@ -342,14 +342,16 @@ namespace Hat.NET
         public static Main cfg = new Main();
         public static event EventHandler<HandledEventArgs> Exit = delegate { };
         public volatile static bool PendingLogSave = false;
-        public static Thread Logger;
+        public volatile static Thread LoggerThread;
+        public static Thread ConsoleThread;
+        public static Thread Listener;
         public static int Main(string[] args)
         {
             HttpServer httpServer;
             PerformFileCheck();
             SubdomainService.Initialize();
             ComponentLoader.Initialize();
-            if (args.GetLength(0) > 0)
+            if (args.Length > 0)
             {
                 httpServer = new HttpServer(Convert.ToInt16(args[0]));
                 Console.WriteLine("Listening on port ", args[0]);
@@ -359,10 +361,12 @@ namespace Hat.NET
                 httpServer = new HttpServer(cfg.defaultport);
                 Console.WriteLine("Listening on port " + cfg.defaultport.ToString());
             }
-            Thread worker = new Thread(new ThreadStart(new Logger().LogWorker));
-            worker.Start();
-            Thread thread = new Thread(new ThreadStart(httpServer.listen));
-            thread.Start();
+            LoggerThread = new Thread(new ThreadStart(Logger.LogWorker));
+            LoggerThread.Start();
+            Listener = new Thread(new ThreadStart(httpServer.listen));
+            Listener.Start();
+            ConsoleThread = new Thread(new ThreadStart(NET.CmdConsole.Start));
+            ConsoleThread.Start();
             return 0;
         }
 
@@ -391,7 +395,7 @@ namespace Hat.NET
             }
             if (!File.Exists(Path.Combine(Environment.CurrentDirectory, "server/404")))
             {
-                File.WriteAllText(Path.Combine(Environment.CurrentDirectory, "server/404"), "<h1>404 - Not found</h1><br><h5>__________________________________________________________________<br>Hat.NET - an opensource .NET webserver software</h5>".WriteHTMLStub());
+                File.WriteAllText(Path.Combine(Environment.CurrentDirectory, "server/404"), "<h1>404 - Not found</h1><br><h5>__________________________________________________________________<br>Hat.NET - an opensource .NET webserver software</h5>".WriteHTMLStub("<title>404</title>"));
             }
         }
         public void PleaseExecuteMyScriptPlz()

@@ -154,7 +154,7 @@ namespace Hat.NET
             p.WriteLine(FullLog.ToString());
         }
 
-        public void LogWorker()
+        public static void LogWorker()
         {
             Logger.TalkyLog("Logging worker thread has started");
             while (true)
