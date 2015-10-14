@@ -127,7 +127,7 @@ namespace Hat.NET
         public static void SaveLog(string filename)
         {
             bool SeparateAdditions = false;
-            if (!String.IsNullOrEmpty(filename) && !String.IsNullOrWhiteSpace(filename))
+            if (!string.IsNullOrEmpty(filename) && !string.IsNullOrWhiteSpace(filename))
             {
                 string path = Path.Combine(Environment.CurrentDirectory, filename);
                 string existingContents = "";
@@ -174,7 +174,7 @@ namespace Hat.NET
             }
             else
             {
-                Logger.SaveLog();
+                SaveLog();
             }
         }
     }
