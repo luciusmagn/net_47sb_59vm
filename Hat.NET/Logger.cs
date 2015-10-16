@@ -156,12 +156,12 @@ namespace Hat.NET
 
         public static void LogWorker()
         {
-            Logger.TalkyLog("Logging worker thread has started");
             while (true)
             {
                 if(Program.PendingLogSave)
                 {
                     SaveLog();
+                    Program.PendingLogSave = false;
                 }
             }
         }

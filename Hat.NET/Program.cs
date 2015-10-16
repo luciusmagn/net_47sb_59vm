@@ -339,12 +339,14 @@ namespace Hat.NET
     public class Program
     {
         public static bool Verbose = false;
-        public static Main cfg = new Main();
+        public static Configs.Main cfg = new Configs.Main();
+        public static Configs.Console consolecfg = new Configs.Console(true);
         public static event EventHandler<HandledEventArgs> Exit = delegate { };
         public volatile static bool PendingLogSave = false;
         public volatile static Thread LoggerThread;
         public static Thread ConsoleThread;
         public static Thread Listener;
+        public static Thread ControlThread;
         public static int Main(string[] args)
         {
             HttpServer httpServer;
@@ -365,8 +367,9 @@ namespace Hat.NET
             LoggerThread.Start();
             Listener = new Thread(new ThreadStart(httpServer.listen));
             Listener.Start();
-            ConsoleThread = new Thread(new ThreadStart(NET.CmdConsole.Start));
+            ConsoleThread = new Thread(new ThreadStart(CmdConsole.Start));
             ConsoleThread.Start();
+            ControlThread = new Thread(new ThreadStart(Control));
             return 0;
         }
 
@@ -402,5 +405,19 @@ namespace Hat.NET
         {
             throw new DoItYourselfImTooLazyException();
         }
+
+        public static void Control()
+        {
+            while(true)
+            {
+                if(!ConsoleThread.IsAlive && !LoggerThread.IsAlive)
+                {
+                    FireExit();
+                    Thread.CurrentThread.Abort();
+                }
+            }
+        }
+
+        public static void FireExit() { Exit(null, new HandledEventArgs()); }
     }
 }

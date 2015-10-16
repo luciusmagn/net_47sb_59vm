@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -93,6 +94,12 @@ namespace Hat.NET
                             {
                                 value = strvalue.Substring(1, strvalue.Length - 2);
                             }
+                            if(strvalue.EndsWith("\'") && strvalue.StartsWith("\'"))
+                            {
+                                if (strvalue.Length > 4)
+                                    throw new InvalidConfigValueException("Char value is only contain one character");
+                                value = Convert.ToChar(strvalue.Substring(1, strvalue.Length - 2));
+                            }
                         }
                         else
                         {
@@ -134,16 +141,59 @@ namespace Hat.NET
                 }
             }
         }
+
+        [Serializable]
+        private class InvalidConfigValueException : Exception
+        {
+            public InvalidConfigValueException()
+            {
+            }
+
+            public InvalidConfigValueException(string message) : base(message)
+            {
+            }
+
+            public InvalidConfigValueException(string message, Exception innerException) : base(message, innerException)
+            {
+            }
+
+            protected InvalidConfigValueException(SerializationInfo info, StreamingContext context) : base(info, context)
+            {
+            }
+        }
     }
 
-    public class Main : Config
+    namespace Configs
     {
-        public string codepath = "server";
-        public string componentspath = "servercomponents";
-        public int defaultport = 80;
-        public bool verbose = false;
-        public int maxPOSTmb = 10;
-        public bool asynchlog = true;
-        public string charset = "utf-8";
+        public class Main : Config
+        {
+            public string codepath = "server";
+            public string componentspath = "servercomponents";
+            public int defaultport = 80;
+            public bool verbose = false;
+            public int maxPOSTmb = 10;
+            public bool asynchlog = true;
+            public string charset = "utf-8";
+        }
+        public class Console : Config
+        {
+            public string ConsoleReadyString = "->";
+            public char CommandDelimiter = ';';
+
+            public Console(bool autoload)
+                : base(true)
+            {
+            }
+
+            public Console() { }
+        }
+
+        public static class ConfigCommands
+        {
+            public static void Show(string[] args)
+            {
+                
+            }
+        }
     }
 }

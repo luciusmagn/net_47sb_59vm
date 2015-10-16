@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Hat.NET.Interaction;
 using System.Collections;
 using System.IO;
-using Hat.NET.Configs;
 
 namespace Hat.NET
 {
