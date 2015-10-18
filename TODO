@@ -1,0 +1,23 @@
+As of the current version, the current things left to be done are:
+
+Project:
+	-Pick a name for the project
+	-Promote the project
+	-Add some version for the project to distinguish between different builds
+Major stuff:
+	-Add SSL (https) support 
+	-Finish WC interpreter	
+	-Implement placeholders and C-like directives
+	-Improve server code
+	-Add support for text stuff (CSScripts)
+Logging:
+	-Improve log appearance
+	-Fix unnecessary empty lines
+Commands:
+	-Implement basic semi-programming console (just for fun)
+	-Add common commands
+	-Add support for command scripts (=> like batch files)
+Config:
+	-Add deserialization for string[]
+	-Add serialization & deserialization for int[]
+	-Add de/serialization for bytes, floats, decimals and singles
