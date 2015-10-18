@@ -16,11 +16,10 @@ namespace Hat.NET
         //HTML
         public static void HTML(string filename, HttpProcessor processor, HandleHaltArgs e)
         {
-            System.Console.WriteLine("HTML");
             if (!e.Handled)
             {
                 processor.writeSuccess();
-                System.Console.WriteLine(filename);
+                Logger.Log(filename);
                 processor.outputStream.Write(File.ReadAllText(filename));
                 processor.outputStream.Flush();
             }

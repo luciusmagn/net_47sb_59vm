@@ -11,6 +11,7 @@ namespace Hat.NET
 
         public static void Start()
         {
+            CommonCommands.isInitialized = true;
             while(true)
             {
                 Console.Write(Program.consolecfg.ConsoleReadyString);
@@ -20,6 +21,7 @@ namespace Hat.NET
 
         public static void CommandSelector(string line)
         {
+            Logger.LogNoTrace(Program.consolecfg.ConsoleReadyString + line);
             string temp = "";
             int index = 0;
             bool isString = false;
@@ -62,7 +64,7 @@ namespace Hat.NET
                     if (command.StartsWith(cmd.LeftValue))
                     {
                         cmd.RightValue.Invoke(
-                            command.Substring(cmd.LeftValue.Length - 1).Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
+                            command.Substring(cmd.LeftValue.Length).Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
                             );
                         found = true;
                         break;
@@ -71,17 +73,39 @@ namespace Hat.NET
                 if (!found)
                 {
                     if (!command.StartsWith(" "))
-                        Logger.TalkyLog("No commands with the specified name found: " + (command.Contains(" ") ? command.Substring(command.IndexOf(' ') - 1) : command));
+                        Logger.TalkyLog("No commands with the specified name found: " + (command.Contains(" ") ? command.Substring(0, command.IndexOf(' ')) : command));
                     else
                         Logger.TalkyLog("Command mustn't start with a space");
                 }
             }
+            Logger.Save();
         }
     }
     public static class CommonCommands
     {
+        public static bool isInitialized = false;
+        static CommonCommands()
+        {
+            CmdConsole.CmdList.Add(new ValuePair<string, Command>("help", Help));
+            CmdConsole.CmdList.Add(new ValuePair<string, Command>("test", Test));
+        }
         public static void Help(string[] args)
         {
+            Logger.Log("Available commands:");
+            Logger.Log("===================");
+            foreach(ValuePair<string, Command> cmd in CmdConsole.CmdList)
+            {
+                Console.Write(cmd.LeftValue + ", ");
+            }
+            Logger.Log();
+        }
+
+        public static void Test(string[] args)
+        {
+            foreach(string arg in args)
+            {
+                Logger.Log(arg);
+            }
         }
     }
 }

@@ -135,7 +135,7 @@ namespace Hat.NET
 
         public void handleGETRequest()
         {
-            Console.WriteLine("GET");
+            Logger.Log("GET");
             srv.handleGETRequest(this);
         }
 
@@ -264,7 +264,7 @@ namespace Hat.NET
                     //We need to find an index. But we don't need to send more than one at a time
                     if (Path.GetFileName(filename).Contains("index"))
                     {
-                        Console.WriteLine(filename);
+                        Logger.Log(filename);
                         if (!Interaction.Interaction.TryExtension(Path.GetExtension(filename), p, filename))
                         {
                             p.writeSuccess("text/plain");
@@ -310,7 +310,7 @@ namespace Hat.NET
         }
         public void handlePOSTRequest(HttpProcessor p, StreamReader inputData)
         {
-            Console.WriteLine(string.Format("POST request: {0}", p.http_url));
+            Logger.Log(string.Format("POST request: {0}", p.http_url));
             string data = inputData.ReadToEnd();
 
             p.writeSuccess();
@@ -356,12 +356,12 @@ namespace Hat.NET
             if (args.Length > 0)
             {
                 httpServer = new HttpServer(Convert.ToInt16(args[0]));
-                Console.WriteLine("Listening on port ", args[0]);
+                Logger.Log("Listening on port ", args[0]);
             }
             else
             {
                 httpServer = new HttpServer(cfg.defaultport);
-                Console.WriteLine("Listening on port " + cfg.defaultport.ToString());
+                Logger.Log("Listening on port " + cfg.defaultport.ToString());
             }
             LoggerThread = new Thread(new ThreadStart(Logger.LogWorker));
             LoggerThread.Start();

@@ -40,13 +40,21 @@ namespace Hat.NET
                 {
                     if (fld.IsPublic && !fld.Name.StartsWith("_") && fld.IsStatic == false)
                     {
-                        if (fld.GetValue(what).GetType() != typeof(string))
+                        if(fld.GetValue(what).GetType() == typeof(char))
                         {
-                            sb.AppendLine(string.Format("{0} = {1}", fld.Name, fld.GetValue(what).ToString()));
+                            sb.AppendLine(string.Format("{0} = {1}", fld.Name, "\'" + fld.GetValue(what).ToString() + "\'"));
+                        }
+                        else if (fld.GetValue(what).GetType() == typeof(string))
+                        {
+                            sb.AppendLine(string.Format("{0} = {1}", fld.Name, "\"" + fld.GetValue(what).ToString() + "\""));
+                        }
+                        else if (fld.GetValue(what).GetType() == typeof(string[]))
+                        {
+                            sb.AppendLine(string.Format("{0} = {1}", fld.Name, "[ " + string.Join(", ", fld.GetValue(what) as string[]) + " ]"));
                         }
                         else
                         {
-                            sb.AppendLine(string.Format("{0} = {1}", fld.Name, "\"" + fld.GetValue(what).ToString() + "\""));
+                            sb.AppendLine(string.Format("{0} = {1}", fld.Name, fld.GetValue(what).ToString()));
                         }
                     }
                 }
@@ -97,7 +105,7 @@ namespace Hat.NET
                             if(strvalue.EndsWith("\'") && strvalue.StartsWith("\'"))
                             {
                                 if (strvalue.Length > 4)
-                                    throw new InvalidConfigValueException("Char value is only contain one character");
+                                    throw new InvalidConfigValueException("Char value can only contain one character");
                                 value = Convert.ToChar(strvalue.Substring(1, strvalue.Length - 2));
                             }
                         }
@@ -174,11 +182,13 @@ namespace Hat.NET
             public int maxPOSTmb = 10;
             public bool asynchlog = true;
             public string charset = "utf-8";
+            public string logname = "Hat.log";
         }
         public class Console : Config
         {
             public string ConsoleReadyString = "->";
             public char CommandDelimiter = ';';
+            public string[] arr = new string[] { "meow", "bitch" };
 
             public Console(bool autoload)
                 : base(true)
