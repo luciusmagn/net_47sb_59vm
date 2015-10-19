@@ -127,7 +127,7 @@ namespace Hat.NET
             }
             IOrderedEnumerable<ComponentContainer> orderedExtensionSelector =
                 from x in Extensions
-                orderby x.Extension.Order, x.Extension.Name
+                orderby x.Component.Order, x.Component.Name
                 select x;
             try
             {
@@ -152,7 +152,7 @@ namespace Hat.NET
                         break;
                     }
                     Logger.Log(string.Format(
-                        "Extension {0} v{1} (by {2}) initiated.", current.Extension.Name, current.Extension.Version, current.Extension.Author));
+                        "Extension {0} v{1} (by {2}) initiated.", current.Component.Name, current.Component.Version, current.Component.Author));
                 }
             }
             catch
@@ -168,12 +168,12 @@ namespace Hat.NET
                 {
                     ComponentContainer.DeInitialize();
                     Logger.Log(string.Format(
-                        "Extension \"{0}\" was deinitialized", ComponentContainer.Extension.Name));
+                        "Extension \"{0}\" was deinitialized", ComponentContainer.Component.Name));
                 }
                 catch (Exception ex)
                 {
                     Logger.Log(string.Format(
-                        "Extension \"{0}\" has thrown an exception while being deinitialized:\n{1}", ComponentContainer.Extension.Name, ex));
+                        "Extension \"{0}\" has thrown an exception while being deinitialized:\n{1}", ComponentContainer.Component.Name, ex));
                 }
             }
 
@@ -188,7 +188,7 @@ namespace Hat.NET
                 catch (Exception ex)
                 {
                     Logger.Log(string.Format(
-                        "Extension \"{0}\" has thrown an exception while being disposed:\n{1}", ComponentContainer.Extension.Name, ex));
+                        "Extension \"{0}\" has thrown an exception while being disposed:\n{1}", ComponentContainer.Component.Name, ex));
                 }
 
 

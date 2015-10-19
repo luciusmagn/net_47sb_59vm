@@ -19,7 +19,7 @@ namespace Hat.NET
 {
     public class ComponentContainer : IDisposable
     {
-        public HatComponent Extension
+        public HatComponent Component
         {
             get;
             protected set;
@@ -43,14 +43,14 @@ namespace Hat.NET
 
         public ComponentContainer(HatComponent plugin, bool dll)
         {
-            this.Extension = plugin;
+            this.Component = plugin;
             this.Initialized = false;
             this.Dll = dll;
         }
 
         public void Initialize()
         {
-            this.Extension.Initialize();
+            this.Component.Initialize();
             this.Initialized = true;
         }
 
@@ -61,7 +61,7 @@ namespace Hat.NET
 
         public void Dispose()
         {
-            this.Extension.Dispose();
+            this.Component.Dispose();
         }
     }
 }

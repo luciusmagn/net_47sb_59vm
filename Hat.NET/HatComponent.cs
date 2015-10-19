@@ -48,11 +48,6 @@ namespace Hat.NET
                 return "None";
             }
         }
-        public virtual bool Enabled
-        {
-            get;
-            set;
-        }
         public int Order
         {
             get;
