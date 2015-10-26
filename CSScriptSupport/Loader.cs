@@ -181,8 +181,6 @@ namespace CSharpComponent
 
             foreach (ComponentContainer ComponentContainer in components)
             {
-
-
                 try
                 {
                     ComponentContainer.Dispose();
