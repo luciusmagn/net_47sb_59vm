@@ -85,7 +85,7 @@ namespace CSharpComponent
         }
         internal static void LoadComponents()
         {
-            string[] ValidExtensions = new string[] { ".cs", ".csComponent", ".Component" }; //is it .Component or Component?
+            string[] ValidExtensions = new string[] { ".cs", ".cscomponent", ".component" };
             List<FileInfo> dif = new DirectoryInfo(ComponentPath).GetFiles().Where(f => ValidExtensions.Contains(f.Extension)).ToList();
             foreach (FileInfo fileInfo in dif)
             {

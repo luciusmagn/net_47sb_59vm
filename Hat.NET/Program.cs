@@ -7,11 +7,9 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
-// offered to the public domain for any use with no restriction
+// HTTP stuff offered to the public domain for any use with no restriction
 // and also with no warranty of any kind, please enjoy. - David Jeske. 
 
-// simple HTTP explanation
-// http://www.jmarshall.com/easy/http/
 
 namespace Hat.NET
 {
@@ -310,13 +308,10 @@ namespace Hat.NET
         }
         public void handlePOSTRequest(HttpProcessor p, StreamReader inputData)
         {
-            Logger.Log(string.Format("POST request: {0}", p.http_url));
-            string data = inputData.ReadToEnd();
-
-            p.writeSuccess();
-            p.outputStream.WriteLine("<html><body><h1>test server</h1>");
-            p.outputStream.WriteLine("<a href=/test>return</a><p>");
-            p.outputStream.WriteLine("postbody: <pre>{0}</pre>", data);
+            if (Interaction.Interaction.Hooks(p))
+            {
+                return;
+            }
         }
 
         public static void handle404(HttpProcessor p)
@@ -349,6 +344,7 @@ namespace Hat.NET
         public static Thread ControlThread;
         public static int Main(string[] args)
         {
+            Console.Title = "I really need a name";
             HttpServer httpServer;
             PerformFileCheck();
             SubdomainService.Initialize();
@@ -357,11 +353,13 @@ namespace Hat.NET
             {
                 httpServer = new HttpServer(Convert.ToInt16(args[0]));
                 Logger.Log("Listening on port ", args[0]);
+                Console.Title = "I really need a name:" + args[0];
             }
             else
             {
                 httpServer = new HttpServer(cfg.defaultport);
                 Logger.Log("Listening on port " + cfg.defaultport.ToString());
+                Console.Title = "I really need a name:" + cfg.defaultport.ToString();
             }
             LoggerThread = new Thread(new ThreadStart(Logger.LogWorker));
             LoggerThread.Start();

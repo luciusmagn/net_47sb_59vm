@@ -154,7 +154,20 @@ namespace Hat.NET
         {
             switch(args.Length)
             {
+                case 0:
+                    Logger.Log(
+                            "Usage:\n",
+                            "get varname; - returns value of a variable\n",
+                            "get varname push command {}; - passes value of a variable to a command\n",
+                            "Description: Allows the user to retrieve values of the variables they stored\n"
+                        );
+                    return;
+                case 1:
+                    Logger.Log(Variables[args[0]]);
+                    return;
+                case 2:
 
+                    break;
             }
         }
 

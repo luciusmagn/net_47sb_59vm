@@ -36,7 +36,7 @@ namespace Hat.NET
             FullLog.AppendLine();
         }
         /// <summary>
-        /// Log showing output to console only when Talkative mode is enabled.
+        /// Log showing output to console only when Verbose mode is enabled.
         /// </summary>
         /// <param name="args"></param>
         public static void TalkyLog(params object[] args)
