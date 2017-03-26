@@ -43,9 +43,7 @@ namespace Hat.NET
                         throw new Exception("A serialized object must be an instance of a class extending Config");
             return sb.ToString();
         }
-        /// <summary>
-        /// Saves config of what
-        /// </summary>
+
         public static void Save(object what)
         {
             StreamWriter str = File.CreateText(Path.Combine(Environment.CurrentDirectory, "configs", what.GetType().Name + ".cfg"));
