@@ -22,31 +22,19 @@ namespace Hat.NET
     {
         public virtual string Name
         {
-            get
-            {
-                return "None";
-            }
+            get { return "None"; }
         }
         public virtual Version Version
         {
-            get
-            {
-                return new Version(1, 0);
-            }
+            get { return new Version(1, 0); }
         }
         public virtual string Author
         {
-            get
-            {
-                return "None";
-            }
+            get { return "None"; }
         }
         public virtual string Description
         {
-            get
-            {
-                return "None";
-            }
+            get { return "None"; }
         }
         public int Order
         {
@@ -54,15 +42,8 @@ namespace Hat.NET
             set;
         }
 
-        protected HatComponent()
-        {
-            this.Order = 1;
-        }
-
-        ~HatComponent()
-        {
-            this.Dispose(false);
-        }
+        protected HatComponent() { this.Order = 1; }
+        ~HatComponent() { this.Dispose(false); }
 
         public void Dispose()
         {
@@ -70,9 +51,7 @@ namespace Hat.NET
             GC.SuppressFinalize(this);
         }
 
-        protected virtual void Dispose(bool disposing)
-        {
-        }
+        protected virtual void Dispose(bool disposing) { }
 
         public abstract void Initialize();
     }

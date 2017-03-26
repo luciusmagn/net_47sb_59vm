@@ -13,31 +13,19 @@ namespace CSScriptSupport
     {
         public override string Author
         {
-            get
-            {
-                return "Lukáš Hozda / magnusi";
-            }
+            get { return "Lukáš Hozda / magnusi"; }
         }
         public override string Description
         {
-            get
-            {
-                return "Provides support for component-like plugins";
-            }
+            get { return "Provides support for component-like plugins"; }
         }
         public override string Name
         {
-            get
-            {
-                return "CSScript Support";
-            }
+            get { return "CSScript Support"; }
         }
         public override Version Version
         {
-            get
-            {
-                return new Version(1,0);
-            }
+            get { return new Version(1,0); }
         }
         public override void Initialize()
         {

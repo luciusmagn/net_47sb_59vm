@@ -30,7 +30,7 @@ namespace Hat.NET
         /// <summary>
         /// minor version
         /// </summary>
-        public static int Minor = 8;
+        public static int Minor = 9;
 
     }
     /// <summary>
@@ -40,13 +40,7 @@ namespace Hat.NET
     public class ApiVersionAttribute : Attribute
     {
         public Version ApiVersion;
-        public ApiVersionAttribute(Version version)
-        {
-            this.ApiVersion = version;
-        }
-        public ApiVersionAttribute(int major, int minor)
-            : this(new Version(major, minor))
-        {
-        }
+        public ApiVersionAttribute(Version version) { this.ApiVersion = version; }
+        public ApiVersionAttribute(int major, int minor) : this(new Version(major, minor)) { }
     }
 }

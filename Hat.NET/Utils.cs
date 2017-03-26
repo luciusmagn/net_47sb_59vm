@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,62 +9,6 @@ namespace Hat.NET
 {
     public static class Utils
     {
-        public static List<string> GetCodeBlocks(string source)
-        {
-            List<string> Blocks = new List<string>();
-            string CurrentBlock = "";
-            bool isInString = false;
-            string Temp;
-            int OpenedBrackets = 0;
-            int ClosedBrackets = 0;
-            int charIndex = 0;
-            Temp = source;
-            NEXTBLOCK:
-            foreach (char ch in Temp)
-            {
-                if (And(ch == '\"' || ch == '\'', (charIndex != 0 ? source[charIndex - 1] != '\\' : true)))
-                {
-                    if (isInString) isInString = false;
-                    else isInString = true;
-                }
-                if (ch == '{' && !isInString)
-                {
-                    CurrentBlock += ch;
-                    OpenedBrackets++;
-                }
-                else if (ch == '}' && !isInString)
-                {
-                    CurrentBlock += ch;
-                    ClosedBrackets++;
-                    if (And(OpenedBrackets != 0, ClosedBrackets != 0) && OpenedBrackets == ClosedBrackets)
-                    {
-                        break;
-                    }
-                }
-                else
-                {
-                    CurrentBlock += ch;
-                }
-                charIndex++;
-            }
-            Temp = Temp.Replace(CurrentBlock, "");
-            Blocks.Add(CurrentBlock);
-            CurrentBlock = "";
-            if (!String.IsNullOrWhiteSpace(Temp))
-            {
-                goto NEXTBLOCK;
-            }
-            return Blocks;
-        }
-        public static bool And(bool left, bool right)
-        {
-            if (right && left)
-            {
-                return true;
-            }
-            else { return false; }
-        }
-
         public static string RemoveExtraWS(string source)
         {
             string temp = "";
@@ -77,9 +22,7 @@ namespace Hat.NET
                     case '\n':
                     case ' ':
                         if(last == ch)
-                        {
                             continue;
-                        }
                         else
                         {
                             temp += ch;
@@ -100,7 +43,6 @@ namespace Hat.NET
             int indexOne = 0;
             int indexTwo = 0;
             foreach(char ch in source)
-            {
                 switch(ch)
                 {
                     case '{':
@@ -112,9 +54,7 @@ namespace Hat.NET
                         tempstr += ch;
                         indexTwo = isString ? indexTwo : indexTwo++;
                         if (indexOne == indexTwo)
-                        {
                             codeblock = false;
-                        }
                         break;
                     case '\"':
                         isString = isString ? false : true;
@@ -126,16 +66,11 @@ namespace Hat.NET
                             tempstr = "";
                         }
                         else
-                        {
                             tempstr += ch;
-                        }
                         break;
                 }
-            }
             if(tempstr != "")
-            {
                 temp.Add(tempstr);
-            }
             return temp;
         }
         public static string RemoveIndent(this string source)
@@ -144,20 +79,20 @@ namespace Hat.NET
             do
             {
                 if(source[source.GetEnumerator().Current] == ' ' || source[source.GetEnumerator().Current] == '\t')
-                {
                     continue;
-                }
                 else
-                {
                     temp += source[source.GetEnumerator().Current];
-                }
             }
             while (source.GetEnumerator().MoveNext());
             return temp;
         }
-        public static string WriteHTMLStub(string body, string head = "")
+
+        public static void WriteBinary(string mime, string filename, HttpProcessor p)
         {
-            return string.Format("<!DOCTYPE HTML>\n<html>\n<head>{0}</head>\n<body>{1}</body>\n</html>", head, body);
+            Stream fs = File.Open(filename, FileMode.Open);
+            p.writeSuccess(mime);
+            fs.CopyTo(p.outputStream.BaseStream);
+            p.outputStream.BaseStream.Flush();
         }
     }
     public static class TextUtils
@@ -165,6 +100,13 @@ namespace Hat.NET
         public static string WriteHTMLStub(this string source, string head = "")
         {
             return string.Format("<!DOCTYPE HTML>\n<html>\n<head>{0}</head>\n<body>{1}</body>\n</html>", head, source);
+        }
+
+        public static void WriteCommon(string mime, string filename, HttpProcessor p)
+        {
+            p.writeSuccess("text/troff");
+            p.outputStream.Write(File.ReadAllText(filename));
+            p.outputStream.Flush();
         }
     }
     public enum AttributeType

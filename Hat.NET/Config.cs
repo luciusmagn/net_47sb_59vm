@@ -35,34 +35,20 @@ namespace Hat.NET
         {
             StringBuilder sb = new StringBuilder();
             if (what.GetType().BaseType == typeof(Config))
-            {
                 foreach (FieldInfo fld in what.GetType().GetFields())
-                {
                     if (fld.IsPublic && !fld.Name.StartsWith("_") && fld.IsStatic == false)
                     {
                         if(fld.GetValue(what).GetType() == typeof(char))
-                        {
                             sb.AppendLine(string.Format("{0} = {1}", fld.Name, "\'" + fld.GetValue(what).ToString() + "\'"));
-                        }
                         else if (fld.GetValue(what).GetType() == typeof(string))
-                        {
                             sb.AppendLine(string.Format("{0} = {1}", fld.Name, "\"" + fld.GetValue(what).ToString() + "\""));
-                        }
                         else if (fld.GetValue(what).GetType() == typeof(string[]))
-                        {
                             sb.AppendLine(string.Format("{0} = {1}", fld.Name, "[ " + string.Join(", ", fld.GetValue(what) as string[]) + " ]"));
-                        }
                         else
-                        {
                             sb.AppendLine(string.Format("{0} = {1}", fld.Name, fld.GetValue(what).ToString()));
-                        }
                     }
-                }
-            }
             else
-            {
                 throw new Exception("A serialized object must be an instance of a class extending Config");
-            }
             return sb.ToString();
         }
         /// <summary>
@@ -99,9 +85,7 @@ namespace Hat.NET
                         if (!int.TryParse(strvalue, out num))
                         {
                             if(strvalue.EndsWith("\"") && strvalue.StartsWith("\""))
-                            {
                                 value = strvalue.Substring(1, strvalue.Length - 2);
-                            }
                             if(strvalue.EndsWith("\'") && strvalue.StartsWith("\'"))
                             {
                                 if (strvalue.Length > 4)
@@ -110,9 +94,7 @@ namespace Hat.NET
                             }
                         }
                         else
-                        {
                             value = num;
-                        }
                         break;
                 }
                 fldlist.Add(name, value);
@@ -120,17 +102,12 @@ namespace Hat.NET
             try
             {
                 foreach (KeyValuePair<string, object> pair in fldlist)
-                {
                     GetType().GetField(pair.Key).SetValue(this, pair.Value);
-                }
             }
             catch { }
         }
 
-        public Config()
-        {
-
-        }
+        public Config() { }
 
         public Config(bool autoload)
         {
@@ -144,7 +121,6 @@ namespace Hat.NET
                 else
                 {
                     this.Deserialize();
-                    //Auto-add missing values
                     Config.Save(this);
                 }
             }

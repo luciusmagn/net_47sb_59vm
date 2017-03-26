@@ -49,9 +49,7 @@ namespace Hat.NET
                     ));
                 }
                 else if(statement.RemoveIndent().StartsWith("doctype"))
-                {
                     BuiltHTML.AppendLine(string.Format("<!doctype {0}>", statement.RemoveIndent().ToLower().Replace("doctype", "").RemoveIndent()));
-                }
             }
         }
     }

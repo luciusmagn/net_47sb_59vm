@@ -38,8 +38,6 @@ namespace Hat.NET
                 string[] files = Directory.GetFiles(Path.Combine(Path.Combine(Environment.CurrentDirectory, path), (p.http_url.Length == 1 ? "" : p.http_url.Substring(1))));
                 bool flag = false;
                 foreach (string filename in files)
-                {
-                    //We need to find an index. But we don't need to send more than one at a time
                     if (Path.GetFileName(filename).Contains("index"))
                     {
                         Console.WriteLine(filename);
@@ -51,20 +49,15 @@ namespace Hat.NET
                             return;
                         }
                         else
-                        {
                             flag = true;
-                        }
                         break;
                     }
-                }
                 if (!flag)
                 {
                     StringBuilder sb = new StringBuilder();
                     sb.AppendLine("<a href=\"../\">../</a><br>");
                     foreach (string file in files)
-                    {
                         sb.AppendLine(string.Format("<a href=\"{0}\">{0}</a><br>", file.Replace(Path.Combine(Environment.CurrentDirectory, path), "")));
-                    }
                     p.outputStream.WriteLine(sb.ToString());
                     p.writeSuccess();
                     p.outputStream.Flush();
@@ -98,18 +91,14 @@ namespace Hat.NET
                     if (line.Trim().Contains("*/"))
                         isComment = false;
                     if (line.Split(new char[] { '=' }).Count() >= 2 && !(line.StartsWith("//") && line.StartsWith("*") && line.StartsWith("#")) && !isComment)
-                    {
                         Subdomains.Add(line.Split(new char[] { '=' })[0], string.Join("", line.Split(new char[] { '=' }).Skip(1)));
-                    }
                 }
             }
             else
             {
                 Logger.Log("subdomains file not found. Generating again");
                 if(!Directory.Exists(Path.Combine(Environment.CurrentDirectory, "services")))
-                {
                     Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, "services"));
-                }
                 File.WriteAllText(Path.Combine(Environment.CurrentDirectory, "services", "service.subdomains"),
                     @"#This is the file for configurations of subdomains
 #It should follow this syntax:

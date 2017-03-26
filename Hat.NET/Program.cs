@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 
 // HTTP stuff offered to the public domain for any use with no restriction
-// and also with no warranty of any kind, please enjoy. - David Jeske. 
+// and also with no warranty of any kind, please enjoy. - David Jeske.
 
 
 namespace Hat.NET
@@ -64,13 +64,9 @@ namespace Hat.NET
                 parseRequest();
                 readHeaders();
                 if (http_method.Equals("GET"))
-                {
                     handleGETRequest();
-                }
                 else if (http_method.Equals("POST"))
-                {
                     handlePOSTRequest();
-                }
             }
             catch (Exception e)
             {
@@ -83,7 +79,7 @@ namespace Hat.NET
             }
             catch {  }
             // bs.Flush(); // flush any remaining output
-            inputStream = null; outputStream = null; // bs = null;            
+            inputStream = null; outputStream = null; // bs = null;
             socket.Close();
         }
 
@@ -92,9 +88,7 @@ namespace Hat.NET
             string request = streamReadLine(inputStream);
             string[] tokens = request.Split(' ');
             if (tokens.Length != 3)
-            {
                 throw new Exception("invalid http request line");
-            }
             http_method = tokens[0].ToUpper();
             http_url = tokens[1];
             http_protocol_versionstring = tokens[2];
@@ -115,15 +109,12 @@ namespace Hat.NET
 
                 int separator = line.IndexOf(':');
                 if (separator == -1)
-                {
                     throw new Exception("invalid http header line: " + line);
-                }
                 string name = line.Substring(0, separator);
                 int pos = separator + 1;
+
                 while ((pos < line.Length) && (line[pos] == ' '))
-                {
-                    pos++; // strip any spaces
-                }
+                    pos++;
 
                 string value = line.Substring(pos, line.Length - pos);
                 Logger.Log(string.Format("header: {0}:{1}", name, value));
@@ -140,12 +131,6 @@ namespace Hat.NET
         private const int BUF_SIZE = 4096;
         public void handlePOSTRequest()
         {
-            // this post data processing just reads everything into a memory stream.
-            // this is fine for smallish things, but for large stuff we should really
-            // hand an input stream to the request processor. However, the input stream 
-            // we hand him needs to let him see the "end of the stream" at this content 
-            // length, because otherwise he won't know when he's seen it all! 
-
             Logger.Log("get post data start");
             int content_len = 0;
             MemoryStream ms = new MemoryStream();
@@ -169,13 +154,9 @@ namespace Hat.NET
                     if (numread == 0)
                     {
                         if (to_read == 0)
-                        {
                             break;
-                        }
                         else
-                        {
                             throw new Exception("client disconnected during post");
-                        }
                     }
                     to_read -= numread;
                     ms.Write(buf, 0, numread);
@@ -190,15 +171,12 @@ namespace Hat.NET
 
         public void writeSuccess(string content_type = "text/html")
         {
-            // this is the successful HTTP response line
             outputStream.WriteLine("HTTP/1.0 200 OK");
             outputStream.WriteLine("Content-Language: cs");
-            // these are the HTTP headers...          
             outputStream.WriteLine("Content-Type: " + content_type + string.Format("; charset={0}", Program.cfg.charset));
             outputStream.WriteLine("Connection: close");
-            // ..add your own headers here if you like
 
-            outputStream.WriteLine(""); // this terminates the HTTP headers.. everything after this is HTTP body..
+            outputStream.WriteLine("");
         }
 
         public void writeFailure()
@@ -243,13 +221,9 @@ namespace Hat.NET
         {
             Logger.Log(string.Format("request: {0}", p.http_url));
             if(Interaction.Interaction.Hooks(p))
-            {
                 return;
-            }
             if (Interaction.Interaction.TryName(p.http_url, p))
-            {
                 return;
-            }
             //If file doesn't exist try trying it as a folder
             if (Directory.Exists(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Length == 1 ? "" : p.http_url.Substring(1))) && !File.Exists(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Length == 1 ? "" : p.http_url.Substring(1))))
             {
@@ -271,9 +245,7 @@ namespace Hat.NET
                             return;
                         }
                         else
-                        {
                             flag = true;
-                        }
                         break;
                     }
                 }
@@ -282,9 +254,7 @@ namespace Hat.NET
                     StringBuilder sb = new StringBuilder();
                     sb.AppendLine("<a href=\"../\">../</a><br>");
                     foreach (string file in files)
-                    {
                         sb.AppendLine(string.Format("<a href=\"{0}\">{0}</a><br>", file.Replace(Path.Combine(Environment.CurrentDirectory, "server"), "")));
-                    }
                     p.outputStream.WriteLine(sb.ToString());
                     p.writeSuccess();
                     p.outputStream.Flush();
@@ -292,6 +262,7 @@ namespace Hat.NET
                 }
                 return;
             }
+
             //if everything else fails, try 404
             else if (!Directory.Exists(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Length == 1 ? "" : p.http_url.Substring(1))) && !File.Exists(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Length == 1 ? "" : p.http_url.Substring(1))))
             {
@@ -308,10 +279,8 @@ namespace Hat.NET
         }
         public void handlePOSTRequest(HttpProcessor p, StreamReader inputData)
         {
-            if (Interaction.Interaction.Hooks(p))
-            {
+            if (Interaction.Interaction.POST(p, inputData))
                 return;
-            }
         }
 
         public static void handle404(HttpProcessor p)
@@ -374,9 +343,7 @@ namespace Hat.NET
         public static void PerformFileCheck()
         {
             if (!Directory.Exists(Path.Combine(Environment.CurrentDirectory, "configs")))
-            {
                 Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, "configs"));
-            }
             if (!File.Exists(Path.Combine(Environment.CurrentDirectory, "configs/Main.cfg")))
             {
                 Config.Save(cfg);
@@ -385,35 +352,26 @@ namespace Hat.NET
             else
             {
                 cfg.Deserialize();
-                //Auto-add missing values
                 Config.Save(cfg);
             }
             Verbose = cfg.verbose;
             HttpProcessor.MAX_POST_SIZE = cfg.maxPOSTmb * 1024 * 1024;
+
             if (!Directory.Exists(Path.Combine(Environment.CurrentDirectory, cfg.codepath)))
-            {
                 Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, cfg.codepath));
-            }
             if (!File.Exists(Path.Combine(Environment.CurrentDirectory, "server/404")))
-            {
                 File.WriteAllText(Path.Combine(Environment.CurrentDirectory, "server/404"), "<h1>404 - Not found</h1><br><h5>__________________________________________________________________<br>Hat.NET - an opensource .NET webserver software</h5>".WriteHTMLStub("<title>404</title>"));
-            }
         }
-        public void PleaseExecuteMyScriptPlz()
-        {
-            throw new DoItYourselfImTooLazyException();
-        }
+        public void PleaseExecuteMyScriptPlz() { throw new DoItYourselfImTooLazyException(); }
 
         public static void Control()
         {
             while(true)
-            {
                 if(!ConsoleThread.IsAlive && !LoggerThread.IsAlive)
                 {
                     FireExit();
                     Thread.CurrentThread.Abort();
                 }
-            }
         }
 
         public static void FireExit() { Exit(null, new HandledEventArgs()); }

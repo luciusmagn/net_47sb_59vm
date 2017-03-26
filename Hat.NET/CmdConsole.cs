@@ -47,13 +47,8 @@ namespace Hat.NET
                     commands.Add(temp);
                     temp = "";
                 }
-                else
-                {
-                    if (precedingchar + ch != CommandDelimiter + ' ')
-                    {
+                else if(precedingchar + ch != CommandDelimiter + ' ')
                         temp += ch;
-                    }
-                }
                     
                 if(index == line.Length - 1 && ch != CommandDelimiter)
                 {
@@ -67,7 +62,6 @@ namespace Hat.NET
             {
                 CommandQuery.Add(command);
                 foreach (ValuePair<string, Command> cmd in CmdList)
-                {
                     if (command.StartsWith(cmd.LeftValue))
                     {
                         cmd.RightValue.Invoke(
@@ -76,7 +70,6 @@ namespace Hat.NET
                         found = true;
                         break;
                     }
-                }
                 if (!found)
                 {
                     if (!command.StartsWith(" "))
@@ -108,16 +101,15 @@ namespace Hat.NET
         public static void Goto(string[] args)
         {
             Console.WriteLine(args[0]);
-            if (Labels.Contains(args[0]))
+            if (!Labels.Contains(args[0])) return;
+
+            Console.WriteLine("yes");
+            if(CmdConsole.CommandQuery.Contains("end: " + args[0]))
+            for(var i = CmdConsole.CommandQuery.IndexOf("lbl: " + args[0]) + 1; i < CmdConsole.CommandQuery.IndexOf("end: " + args[0]); i++)
             {
-                Console.WriteLine("yes");
-                if(CmdConsole.CommandQuery.Contains("end: " + args[0]))
-                for(var i = CmdConsole.CommandQuery.IndexOf("lbl: " + args[0]) + 1; i < CmdConsole.CommandQuery.IndexOf("end: " + args[0]); i++)
-                {
-                    if (CmdConsole.CommandQuery[i].StartsWith("lbl:") || CmdConsole.CommandQuery[i].StartsWith("end:"))
-                        continue;
-                    CmdConsole.CommandSelector(CmdConsole.CommandQuery[i]);
-                }
+                if (CmdConsole.CommandQuery[i].StartsWith("lbl:") || CmdConsole.CommandQuery[i].StartsWith("end:"))
+                    continue;
+                CmdConsole.CommandSelector(CmdConsole.CommandQuery[i]);
             }
         }
 
@@ -139,13 +131,9 @@ namespace Hat.NET
                     break;
                 case 2:
                     if(args[1] == "end")
-                    {
                         CmdConsole.CommandQuery.Add("end: " + args[0]);
-                    }
                     else
-                    {
                         Logger.Log("Unknown sub-command");
-                    }
                     break;
             }
         }
@@ -193,15 +181,11 @@ namespace Hat.NET
                 else
                 {
                     if(args[1] != "=")
-                    {
                         Logger.Log("Syntax error: ", string.Join(" ", args));
-                    }
                     else
                     {
                         if(args.Length < 3)
-                        {
                             Logger.Log("Syntax error: ", string.Join(" ", args));
-                        }
                         else
                         {
                             Variables.Remove(args[0]);
@@ -222,15 +206,11 @@ namespace Hat.NET
                 else
                 {
                     if (args[1] != "=")
-                    {
                         Logger.Log("Syntax error: ", string.Join(" ", args));
-                    }
                     else
                     {
                         if (args.Length < 3)
-                        {
                             Logger.Log("Syntax error: ", string.Join(" ", args));
-                        }
                         else
                         {
                             Variables.Add(args[0], string.Join(" ", args).Replace(args[0] + " = ", ""));
@@ -246,18 +226,14 @@ namespace Hat.NET
             Logger.Log("Available commands:");
             Logger.Log("===================");
             foreach(ValuePair<string, Command> cmd in CmdConsole.CmdList)
-            {
                 Console.Write(cmd.LeftValue + ", ");
-            }
             Logger.Log();
         }
 
         public static void Test(string[] args)
         {
             foreach(string arg in args)
-            {
                 Logger.Log(arg);
-            }
         }
 
         public static void Quit(string[] args)

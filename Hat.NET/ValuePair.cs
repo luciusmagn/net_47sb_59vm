@@ -30,25 +30,17 @@ namespace Hat.NET
         public void SetRight(Right r)
         {
             if (r != null)
-            {
                 rightValue = r;
-            }
             else
-            {
                 throw new System.NullReferenceException();
-            }
         }
 
         public void SetLeft(Left l)
         {
             if (l != null)
-            {
                 leftValue = l;
-            }
             else
-            {
                 throw new System.NullReferenceException();
-            }
         }
     }
 }

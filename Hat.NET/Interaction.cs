@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 namespace Hat.NET.Interaction
 {
     public delegate void Hook(string fileName, HttpProcessor processor, HandleHaltArgs e);
+    public delegate void POSTHook(string fileName, HttpProcessor processor, StreamReader inputData, HandleHaltArgs e);
     public class Interaction
     {
         /// <summary>
@@ -30,7 +31,7 @@ namespace Hat.NET.Interaction
         /// <summary>
         /// Hooks for POST requests. You check for the condition and/or prevent other hooks.
         /// </summary>
-        public static List<Hook> POSTHooks = new List<Hook>();
+        public static List<POSTHook> POSTHooks = new List<POSTHook>();
 
         public static bool TryExtension(string ext, HttpProcessor p, string name = "")
         {
@@ -38,13 +39,11 @@ namespace Hat.NET.Interaction
             bool flag = false;
             HandleHaltArgs args = new HandleHaltArgs();
             foreach(ValuePair<string, Hook> pair in ExtensionHooks)
-            {
                 if (ext.Replace(".", "").ToLower() == pair.LeftValue.Replace(".", "").ToLower())
                 {
                     pair.RightValue(name, p, args);
                     flag = true;
                 }
-            }
             return flag;
         }
 
@@ -53,13 +52,11 @@ namespace Hat.NET.Interaction
             bool flag = false;
             HandleHaltArgs args = new HandleHaltArgs();
             foreach (ValuePair<string, Hook> pair in NameHooks)
-            {
                 if ((request.StartsWith("/") ? request.Substring(1) : request) == (pair.LeftValue.StartsWith("/") ? pair.LeftValue.Substring(1) : pair.LeftValue))
                 {
                     pair.RightValue(p.http_url, p, args);
                     flag = true;
                 }
-            }
             return flag;
         }
 
@@ -71,80 +68,72 @@ namespace Hat.NET.Interaction
             {
                 hook(p.http_url, p, args);
                 if(args.Halt)
-                {
                     break;
-                }
                 if(args.PreventDefault)
-                {
                     flag = true;
-                }
             }
             return flag;
         }
 
-        public static bool POST(HttpProcessor p)
+        public static bool POST(HttpProcessor p, StreamReader data)
         {
             bool flag = false;
             HandleHaltArgs args = new HandleHaltArgs();
-            foreach (Hook hook in POSTHooks)
+            foreach (POSTHook hook in POSTHooks)
             {
-                hook(p.http_url, p, args);
+                hook(p.http_url, p, data, args);
                 if (args.Halt)
-                {
                     break;
-                }
                 if (args.PreventDefault)
-                {
                     flag = true;
-                }
             }
             return flag;
         }
         static Interaction()
         {
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".png", ImageDelegates.PNG));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".jpg", ImageDelegates.JPEG));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".jpeg", ImageDelegates.JPEG));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".gif", ImageDelegates.GIF));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".png", (x, y, z) => { if (!z.Handled) Utils.WriteBinary("image/png", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".jpg", (x, y, z) => { if (!z.Handled) Utils.WriteBinary("image/jpeg", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".jpeg", (x, y, z) => { if (!z.Handled) Utils.WriteBinary("image/jpeg", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".gif", (x, y, z) => { if (!z.Handled) Utils.WriteBinary("image/gif", x, y); }));
             
             ExtensionHooks.Add(new ValuePair<string, Hook>(".htm", TextDelegates.HTML));
             ExtensionHooks.Add(new ValuePair<string, Hook>(".html", TextDelegates.HTML));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".css", TextDelegates.CSS));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".css", (x, y, z) => { if (!z.Handled) TextUtils.WriteCommon("text/css", x, y); }));
             ExtensionHooks.Add(new ValuePair<string, Hook>(".wc", TextDelegates.WC));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".s", TextDelegates.S));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".par", TextDelegates.PAR));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".csv", TextDelegates.CSV));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".n3", TextDelegates.N3));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".ics", TextDelegates.ICS));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".txt", TextDelegates.TXT));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".dsc", TextDelegates.DSC));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".rtx", TextDelegates.RTX));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".sgml", TextDelegates.SGML));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".tsv", TextDelegates.TSV));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".t", TextDelegates.T));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".ttl", TextDelegates.TTL));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".uri", TextDelegates.URI)); 
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".curl", TextDelegates.CURL));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".dcurl", TextDelegates.DCURL));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".mcurl", TextDelegates.MCURL));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".scurl", TextDelegates.SCURL));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".fly", TextDelegates.FLY));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".flx", TextDelegates.FLX));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".gv", TextDelegates.GV));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".3dml", TextDelegates._3DML));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".spot", TextDelegates.SPOT));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".jad", TextDelegates.JAD));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".wml", TextDelegates.WML));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".wmls", TextDelegates.WMLS));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".c", TextDelegates.C));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".f", TextDelegates.F));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".java", TextDelegates.JAVA));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".p", TextDelegates.P));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".etx", TextDelegates.ETX));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".vcs", TextDelegates.VCS));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".uu", TextDelegates.UU));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".vcf", TextDelegates.VCF));
-            ExtensionHooks.Add(new ValuePair<string, Hook>(".yaml", TextDelegates.YAML));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".s", (x, y, z) => { if (!z.Handled) TextUtils.WriteCommon("text/x-asm", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".par", (x, y, z) => { if(!z.Handled) TextUtils.WriteCommon("text/plain-bas", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".csv", (x, y, z) => TextUtils.WriteCommon("text/csv", x, y)));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".n3", (x, y, z) => { if (!z.Handled) TextUtils.WriteCommon("text/n3", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".ics", (x, y, z) => { if (!z.Handled) TextUtils.WriteCommon("text/calendar", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".txt", (x, y, z) => { if (!z.Handled) TextUtils.WriteCommon("text/plain", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".dsc", (x, y, z) => { if (!z.Handled) TextUtils.WriteCommon("text/prs.lines.tag", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".rtx", (x, y, z) => { if (!z.Handled) TextUtils.WriteCommon("text/rich-text", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".sgml", (x, y, z) => { if (!z.Handled) TextUtils.WriteCommon("text/sgml", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".tsv", (x, y, z) => { if (!z.Handled) TextUtils.WriteCommon("text/tab-separated-values", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".t", (x, y, z) => { if (!z.Handled) TextUtils.WriteCommon("text/troff", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".ttl", (x, y, z) => { if (!z.Handled) TextUtils.WriteCommon("text/turtle", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".uri", (x, y, z) => { if (!z.Handled) TextUtils.WriteCommon("text/uri-list", x, y); })); 
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".curl", (x, y, z) => { if (!z.Handled) TextUtils.WriteCommon("text/vnd.curl", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".dcurl", (x, y, z) => { if (!z.Handled) TextUtils.WriteCommon("text/vnd.curl.dcurl", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".mcurl", (x, y, z) => { if (!z.Handled) TextUtils.WriteCommon("text/vnd.curl", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".scurl", (x, y, z) => { if (!z.Handled) TextUtils.WriteCommon("text/vnd.curl", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".fly", (x, y, z) => { if (!z.Handled) TextUtils.WriteCommon("text/vnd.fly", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".flx", (x, y, z) => { if (!z.Handled) TextUtils.WriteCommon("text/vnd.fml.flexstor", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".gv", (x, y, z) => { if (!z.Handled) TextUtils.WriteCommon("text/vnd.grapiz", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".3dml", (x, y, z) => { if (!z.Handled) TextUtils.WriteCommon("text/vnd.in3d.3dml", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".spot", (x, y, z) => { if (!z.Handled) TextUtils.WriteCommon("text/vnd.in3d.spot", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".jad", (x, y, z) => { if (!z.Handled) TextUtils.WriteCommon("text/vnd.sun.j2me.appdescriptor", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".wml", (x, y, z) => { if (!z.Handled) TextUtils.WriteCommon("text/vnd.wap.wml", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".wmls", (x, y, z) => { if (!z.Handled) TextUtils.WriteCommon("text/vnd.wap.wmlscript", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".c", (x, y, z) => { if (!z.Handled) TextUtils.WriteCommon("text/x-c", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".f", (x, y, z) => { if (!z.Handled) TextUtils.WriteCommon("text/x-fortran", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".java", (x, y, z) => { if (!z.Handled) TextUtils.WriteCommon("text/x-java-source.java", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".p", (x, y, z) => { if (!z.Handled) TextUtils.WriteCommon("text/x-pascal", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".etx", (x, y, z) => { if (!z.Handled) TextUtils.WriteCommon("text/x-setex", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".vcs", (x, y, z) => { if (!z.Handled) TextUtils.WriteCommon("text/x-vcalendar", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".uu", (x, y, z) => { if (!z.Handled) TextUtils.WriteCommon("text/x-uuencode", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".vcf", (x, y, z) => { if (!z.Handled) TextUtils.WriteCommon("text/x-vcard", x, y); }));
+            ExtensionHooks.Add(new ValuePair<string, Hook>(".yaml", (x, y, z) => { if (!z.Handled) TextUtils.WriteCommon("text/yaml", x, y); }));
 
             ExtensionHooks.Add(new ValuePair<string, Hook>(".exe", AppDelegates.OCTET_STREAM));
             ExtensionHooks.Add(new ValuePair<string, Hook>(".bin", AppDelegates.OCTET_STREAM));
@@ -175,28 +164,16 @@ namespace Hat.NET.Interaction
         /// <returns>true if yes; otherwise, false.</returns>
         public bool Halt
         {
-            get
-            {
-                return this.halt;
-            }
-            set
-            {
-                this.halt = value;
-            }
+            get { return this.halt; }
+            set { this.halt = value; }
         }
         private bool preventDefault = false;
         /// <summary>Gets or sets a value that indicates whether the event handler should prevent default behavior</summary>
         /// <returns>true if the default behavior should be prevented; otherwise, false.</returns>
         public bool PreventDefault
         {
-            get
-            {
-                return this.preventDefault;
-            }
-            set
-            {
-                this.preventDefault = value;
-            }
+            get { return this.preventDefault; }
+            set { this.preventDefault = value; }
         }
     }
 }
