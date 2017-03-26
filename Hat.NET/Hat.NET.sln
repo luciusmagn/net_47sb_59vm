@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hat.NET", "Hat.NET.csproj",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSScriptSupport", "..\CSScriptSupport\CSScriptSupport.csproj", "{574A951B-2567-4DF5-A54D-9C0CAE54F3A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "C2OnlineCompiler", "..\C2OnlineCompiler\C2OnlineCompiler.csproj", "{8DF14DF0-3072-45DB-B2E5-413D44C967FE}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HookTest", "..\HookTest\HookTest.csproj", "{89638AC4-220B-42A8-8AFE-B063E301A970}"
 EndProject
 Global
@@ -25,10 +23,6 @@ Global
 		{574A951B-2567-4DF5-A54D-9C0CAE54F3A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{574A951B-2567-4DF5-A54D-9C0CAE54F3A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{574A951B-2567-4DF5-A54D-9C0CAE54F3A6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8DF14DF0-3072-45DB-B2E5-413D44C967FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8DF14DF0-3072-45DB-B2E5-413D44C967FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8DF14DF0-3072-45DB-B2E5-413D44C967FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8DF14DF0-3072-45DB-B2E5-413D44C967FE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{89638AC4-220B-42A8-8AFE-B063E301A970}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{89638AC4-220B-42A8-8AFE-B063E301A970}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89638AC4-220B-42A8-8AFE-B063E301A970}.Release|Any CPU.ActiveCfg = Release|Any CPU

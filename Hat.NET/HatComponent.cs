@@ -36,11 +36,7 @@ namespace Hat.NET
         {
             get { return "None"; }
         }
-        public int Order
-        {
-            get;
-            set;
-        }
+        public int Order { get; set; }
 
         protected HatComponent() { this.Order = 1; }
         ~HatComponent() { this.Dispose(false); }

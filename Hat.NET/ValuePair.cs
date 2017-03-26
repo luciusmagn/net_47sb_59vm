@@ -8,19 +8,9 @@ namespace Hat.NET
 {
     public class ValuePair<Left, Right>
     {
-        Left leftValue;
-        Right rightValue;
+        public Left LeftValue;
+        public Right RightValue;
 
-        public Left LeftValue
-        {
-            get { return leftValue; }
-            set { leftValue = value; }
-        }
-        public Right RightValue
-        {
-            get { return rightValue; }
-            set { rightValue = value; }
-        }
         public ValuePair(Left l, Right r)
         {
             SetLeft(l);
@@ -30,7 +20,7 @@ namespace Hat.NET
         public void SetRight(Right r)
         {
             if (r != null)
-                rightValue = r;
+                RightValue = r;
             else
                 throw new System.NullReferenceException();
         }
@@ -38,7 +28,7 @@ namespace Hat.NET
         public void SetLeft(Left l)
         {
             if (l != null)
-                leftValue = l;
+                LeftValue = l;
             else
                 throw new System.NullReferenceException();
         }

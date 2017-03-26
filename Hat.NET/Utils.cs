@@ -12,7 +12,7 @@ namespace Hat.NET
         public static string RemoveExtraWS(string source)
         {
             string temp = "";
-            foreach(char ch in source)
+            foreach (char ch in source)
             {
                 char last = 'a';
                 switch (ch)
@@ -21,7 +21,7 @@ namespace Hat.NET
                     case '\r':
                     case '\n':
                     case ' ':
-                        if(last == ch)
+                        if (last == ch)
                             continue;
                         else
                         {
@@ -42,8 +42,8 @@ namespace Hat.NET
             bool isString = false;
             int indexOne = 0;
             int indexTwo = 0;
-            foreach(char ch in source)
-                switch(ch)
+            foreach (char ch in source)
+                switch (ch)
                 {
                     case '{':
                         tempstr += ch;
@@ -60,7 +60,7 @@ namespace Hat.NET
                         isString = isString ? false : true;
                         break;
                     default:
-                        if(ch == c && !codeblock)
+                        if (ch == c && !codeblock)
                         {
                             temp.Add(tempstr);
                             tempstr = "";
@@ -69,7 +69,7 @@ namespace Hat.NET
                             tempstr += ch;
                         break;
                 }
-            if(tempstr != "")
+            if (tempstr != "")
                 temp.Add(tempstr);
             return temp;
         }
@@ -78,7 +78,7 @@ namespace Hat.NET
             string temp = "";
             do
             {
-                if(source[source.GetEnumerator().Current] == ' ' || source[source.GetEnumerator().Current] == '\t')
+                if (source[source.GetEnumerator().Current] == ' ' || source[source.GetEnumerator().Current] == '\t')
                     continue;
                 else
                     temp += source[source.GetEnumerator().Current];

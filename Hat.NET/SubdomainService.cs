@@ -84,9 +84,9 @@ namespace Hat.NET
             bool isComment = false;
             if (File.Exists(Path.Combine(Environment.CurrentDirectory, "services", "service.subdomains")))
             {
-                foreach(string line in File.ReadAllLines(Path.Combine(Environment.CurrentDirectory, "services", "service.subdomains")))
+                foreach (string line in File.ReadAllLines(Path.Combine(Environment.CurrentDirectory, "services", "service.subdomains")))
                 {
-                    if(line.Replace(" ", "").StartsWith("/*"))
+                    if (line.Replace(" ", "").StartsWith("/*"))
                         isComment = true;
                     if (line.Trim().Contains("*/"))
                         isComment = false;
@@ -97,7 +97,7 @@ namespace Hat.NET
             else
             {
                 Logger.Log("subdomains file not found. Generating again");
-                if(!Directory.Exists(Path.Combine(Environment.CurrentDirectory, "services")))
+                if (!Directory.Exists(Path.Combine(Environment.CurrentDirectory, "services")))
                     Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, "services"));
                 File.WriteAllText(Path.Combine(Environment.CurrentDirectory, "services", "service.subdomains"),
                     @"#This is the file for configurations of subdomains
@@ -112,13 +112,13 @@ test.localhost=banana\test
         }
     }
 
-    
+
 }
 
 namespace Hat.NET.Configs
 {
     public class SubdomainService : Config
     {
-        public bool enabled = true;  
+        public bool enabled = true;
     }
 }

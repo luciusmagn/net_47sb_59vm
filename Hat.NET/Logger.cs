@@ -46,16 +46,12 @@ namespace Hat.NET
             foreach (object arg in args)
             {
                 if (Program.Verbose)
-                {
                     Console.Write(arg);
-                }
                 LogContent.Append(arg);
                 FullLog.Append(arg);
             }
             if (Program.Verbose)
-            {
                 Console.WriteLine();
-            }
             LogContent.AppendLine();
             FullLog.AppendLine();
         }
@@ -82,9 +78,7 @@ namespace Hat.NET
             LogContent.Append("[" + DateTime.Now.ToLongTimeString() + "]");
             FullLog.Append("[" + DateTime.Now.ToLongTimeString() + "]");
             foreach (object arg in args)
-            {
                 LogContent.Append(arg);
-            }
             FullLog.AppendLine();
             LogContent.AppendLine();
         }
@@ -94,24 +88,15 @@ namespace Hat.NET
         static Logger()
         {
             Log("Logger initialized.");
-            Program.Exit += ProgramExit;
+            Program.Exit += (x, y) => { Save(); };
         }
 
-        public static void ProgramExit(object sender, System.ComponentModel.HandledEventArgs e)
-        {
-            Save();
-        }
-        /// <summary>
-        /// Saves what log got so far.
-        /// </summary>
         public static void SaveLog()
         {
             string path = Path.Combine(Environment.CurrentDirectory, LogName);
             string existingContents = "";
             if (File.Exists(path))
-            {
                 existingContents = File.ReadAllText(path);
-            }
             StreamWriter output = new StreamWriter(path);
             output.Write(existingContents);
             output.WriteLine();
@@ -157,25 +142,19 @@ namespace Hat.NET
         public static void LogWorker()
         {
             while (true)
-            {
                 if(Program.PendingLogSave)
                 {
                     SaveLog();
                     Program.PendingLogSave = false;
                 }
-            }
         }
 
         public static void Save()
         {
             if(Program.cfg.asynchlog)
-            {
                 Program.PendingLogSave = true;
-            }
             else
-            {
                 SaveLog();
-            }
         }
     }
 }

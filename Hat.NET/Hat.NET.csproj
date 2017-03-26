@@ -51,14 +51,12 @@
     <Compile Include="ComponentLoader.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="CmdConsole.cs" />
-    <Compile Include="DoItYourselfImTooLazyException.cs" />
     <Compile Include="HatComponent.cs" />
     <Compile Include="Interaction.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="SubdomainService.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="ValuePair.cs" />
-    <Compile Include="WCParser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

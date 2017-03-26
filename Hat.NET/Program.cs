@@ -77,7 +77,7 @@ namespace Hat.NET
             {
                 outputStream.Flush();
             }
-            catch {  }
+            catch { }
             // bs.Flush(); // flush any remaining output
             inputStream = null; outputStream = null; // bs = null;
             socket.Close();
@@ -220,7 +220,7 @@ namespace Hat.NET
         public void handleGETRequest(HttpProcessor p)
         {
             Logger.Log(string.Format("request: {0}", p.http_url));
-            if(Interaction.Interaction.Hooks(p))
+            if (Interaction.Interaction.Hooks(p))
                 return;
             if (Interaction.Interaction.TryName(p.http_url, p))
                 return;
@@ -362,12 +362,11 @@ namespace Hat.NET
             if (!File.Exists(Path.Combine(Environment.CurrentDirectory, "server/404")))
                 File.WriteAllText(Path.Combine(Environment.CurrentDirectory, "server/404"), "<h1>404 - Not found</h1><br><h5>__________________________________________________________________<br>Hat.NET - an opensource .NET webserver software</h5>".WriteHTMLStub("<title>404</title>"));
         }
-        public void PleaseExecuteMyScriptPlz() { throw new DoItYourselfImTooLazyException(); }
 
         public static void Control()
         {
-            while(true)
-                if(!ConsoleThread.IsAlive && !LoggerThread.IsAlive)
+            while (true)
+                if (!ConsoleThread.IsAlive && !LoggerThread.IsAlive)
                 {
                     FireExit();
                     Thread.CurrentThread.Abort();

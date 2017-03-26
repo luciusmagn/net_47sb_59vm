@@ -23,19 +23,11 @@ namespace Hat.NET
 {
     public class ApiVersion
     {
-        /// <summary>
-        /// major version
-        /// </summary>
         public static int Major = 0;
-        /// <summary>
-        /// minor version
-        /// </summary>
         public static int Minor = 9;
 
     }
-    /// <summary>
-    /// This is the ApiVersion Attribute
-    /// </summary>
+
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     public class ApiVersionAttribute : Attribute
     {

@@ -23,14 +23,6 @@ namespace Hat.NET
     /// </summary>
     public class Config
     {
-        /// <summary>
-        /// Turns public fields into a serialized string
-        /// </summary>
-        /// <param name="what">
-        ///     object whose fields you want to serialize
-        ///     it is required that what extends Config class.
-        /// </param>
-        /// <returns>String containing serialized fields of the class</returns>
         public static string Serialize(object what)
         {
             StringBuilder sb = new StringBuilder();
@@ -38,7 +30,7 @@ namespace Hat.NET
                 foreach (FieldInfo fld in what.GetType().GetFields())
                     if (fld.IsPublic && !fld.Name.StartsWith("_") && fld.IsStatic == false)
                     {
-                        if(fld.GetValue(what).GetType() == typeof(char))
+                        if (fld.GetValue(what).GetType() == typeof(char))
                             sb.AppendLine(string.Format("{0} = {1}", fld.Name, "\'" + fld.GetValue(what).ToString() + "\'"));
                         else if (fld.GetValue(what).GetType() == typeof(string))
                             sb.AppendLine(string.Format("{0} = {1}", fld.Name, "\"" + fld.GetValue(what).ToString() + "\""));
@@ -47,14 +39,13 @@ namespace Hat.NET
                         else
                             sb.AppendLine(string.Format("{0} = {1}", fld.Name, fld.GetValue(what).ToString()));
                     }
-            else
-                throw new Exception("A serialized object must be an instance of a class extending Config");
+                    else
+                        throw new Exception("A serialized object must be an instance of a class extending Config");
             return sb.ToString();
         }
         /// <summary>
         /// Saves config of what
         /// </summary>
-        /// <param name="what">instance of a class extending Config</param>
         public static void Save(object what)
         {
             StreamWriter str = File.CreateText(Path.Combine(Environment.CurrentDirectory, "configs", what.GetType().Name + ".cfg"));
@@ -67,7 +58,7 @@ namespace Hat.NET
         {
             string[] strs = File.ReadAllLines(Path.Combine(Environment.CurrentDirectory, "configs", this.GetType().Name + ".cfg"));
             Dictionary<string, object> fldlist = new Dictionary<string, object>();
-            foreach(string str in strs)
+            foreach (string str in strs)
             {
                 string name = str.Replace(" = ", "=").Split('=')[0];
                 string strvalue = string.Join("=", str.Replace(" = ", "=").Split('=').Skip(1).ToArray());
@@ -84,12 +75,12 @@ namespace Hat.NET
                         int num;
                         if (!int.TryParse(strvalue, out num))
                         {
-                            if(strvalue.EndsWith("\"") && strvalue.StartsWith("\""))
+                            if (strvalue.EndsWith("\"") && strvalue.StartsWith("\""))
                                 value = strvalue.Substring(1, strvalue.Length - 2);
-                            if(strvalue.EndsWith("\'") && strvalue.StartsWith("\'"))
+                            if (strvalue.EndsWith("\'") && strvalue.StartsWith("\'"))
                             {
                                 if (strvalue.Length > 4)
-                                    throw new InvalidConfigValueException("Char value can only contain one character");
+                                    throw new Exception("Char value can only contain one character");
                                 value = Convert.ToChar(strvalue.Substring(1, strvalue.Length - 2));
                             }
                         }
@@ -115,34 +106,14 @@ namespace Hat.NET
             {
                 if (!File.Exists(Path.Combine(Environment.CurrentDirectory, string.Format("configs/{0}.cfg", GetType().Name))))
                 {
-                    Config.Save(this);
-                    this.Deserialize();
+                    Save(this);
+                    Deserialize();
                 }
                 else
                 {
-                    this.Deserialize();
-                    Config.Save(this);
+                    Deserialize();
+                    Save(this);
                 }
-            }
-        }
-
-        [Serializable]
-        private class InvalidConfigValueException : Exception
-        {
-            public InvalidConfigValueException()
-            {
-            }
-
-            public InvalidConfigValueException(string message) : base(message)
-            {
-            }
-
-            public InvalidConfigValueException(string message, Exception innerException) : base(message, innerException)
-            {
-            }
-
-            protected InvalidConfigValueException(SerializationInfo info, StreamingContext context) : base(info, context)
-            {
             }
         }
     }
@@ -166,20 +137,8 @@ namespace Hat.NET
             public char CommandDelimiter = ';';
             public string[] arr = new string[] { "meow", "bitch" };
 
-            public Console(bool autoload)
-                : base(true)
-            {
-            }
-
+            public Console(bool autoload) : base(true) { }
             public Console() { }
-        }
-
-        public static class ConfigCommands
-        {
-            public static void Show(string[] args)
-            {
-                
-            }
         }
     }
 }
