@@ -1,4 +1,4 @@
-As of the current version, the current things left to be done are:
+As of the current version, the current things are left to be done are:
 
 Project:
 	-Pick a name for the project
@@ -6,15 +6,11 @@ Project:
 	-Add some version for the project to distinguish between different builds
 Major stuff:
 	-Add SSL (https) support 
-	-Finish WC interpreter	
-	-Implement placeholders and C-like directives
 	-Improve server code
-	-Add support for text stuff (CSScripts)
 Logging:
 	-Improve log appearance
 	-Fix unnecessary empty lines
 Commands:
-	-Implement basic semi-programming console (just for fun)
 	-Add common commands
 	-Add support for command scripts (=> like batch files)
 Config:
