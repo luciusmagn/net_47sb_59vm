@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Hat.NET;
-using Hat.NET.Interaction;
+using net_47sb_59vm;
+using net_47sb_59vm.Interaction;
 using System.IO;
 
 namespace HookTest
@@ -12,22 +8,10 @@ namespace HookTest
     [ApiVersion(0, 9)]
     public class HookTest : HatComponent
     {
-        public override string Author
-        {
-            get { return "Lukáš Hozda / magnusi"; }
-        }
-        public override string Description
-        {
-            get { return "Tests whether custom hooks are working correctly"; }
-        }
-        public override string Name
-        {
-            get { return "Hook Test"; }
-        }
-        public override Version Version
-        {
-            get { return new Version(1, 0); }
-        }
+        public override string Author { get { return "Lukáš Hozda / magnusi"; } }
+        public override string Description { get { return "Tests whether custom hooks are working correctly"; } }
+        public override string Name { get { return "Hook Test"; } }
+        public override Version Version { get { return new Version(1, 0); } }
         public override void Initialize()
         {
             Console.WriteLine("loaded");
