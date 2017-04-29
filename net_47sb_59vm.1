@@ -1,0 +1,98 @@
+.TH NET_47SB_59VM 1
+.SH NAME
+net_47sb_59vm \- malý, relativně jednoduchý HTTP server s možností servrového kódu v jazyce C#.
+.SH DESCRIPTION
+.B net_47sb_59vm
+je jednoduchý webový server napsaný v jazyce C# pro platformu .NET. Kromě standardní knihovny a knihovny MicroConfig, jež je do něj vložena, nemá vnější závislosti. Server dokáže pracovat s virtuálními subdoménami po stylu Apache. Serverový kód je ve formě C# rozšíření, která jsou dynamicky načítána po spuštění serveru. Server má také primitivní příkazovou řádku, ale ta není dokončena a není hlavním cílem projektu. net_47sb_59vm dokáže zpracovat většinu známých souborových typů (viz. Interaction.cs). Rozšíření pro server jsou založena na způsobu, jakým fungují rozšíření pro server Terrarie, TShock.
+.SH NASTAVENÍ
+Při spuštění lze podat jako argument číslo portu, na jakém má server běžet. Nastavení portu pomocí příkazové řádky má přednost před nastavením v konfiguračních souborech. Tato sekce popisuje nastavení v souboru configs/Main.cfg.
+.TP
+.BR codepath\fR
+Změní složku, ze které net_47sb_59vm podává soubory.
+.TP
+.BR componentspath\fR
+Změní složku, ze které net_47sb_59vm načítá rozšíření. 
+.TP
+.BR defaultport\fR
+Port, na kterém net_47sb_59vm běží.
+.TP
+.BR verbose\fR
+Mění, kolik toho net_47sb_59vm vypisuje do stdout.
+.TP
+.BR maxPOSTmb\fR
+Mění limit velikosti POST requestů.
+.TP
+.BR asynchlog\fR
+Zapne asynchronní logování.
+.TP
+.BR charset\fR
+Mění kódování textu. Výchozí kódování je Unicode (utf-8).
+.TP
+.BR logname\fR
+Změní název souboru s logy.
+.SH MODUS OPERANDI
+.nr step 1 1
+.IP \fB\n[step] 6\fR
+Při spuštění net_47sb_59vm načte rozšíření a vytvoří socket pro server.
+.IP \fB\n+[step] \fR
+Každý požadavek je zpracován pomocí části programu, která čte HTTP headery.
+.IP \fB\n+[step] \fR
+POST požadavky jsou zpracovány pomocí uživatelského kódu.
+.IP \fB\n+[step] \fR
+GET požadavky jsou zpracovány buď pomocí lambd v Interaction.cs nebo pomocí delegátů v CommonDelegates.cs. Uživatelská rozšíření mohou také zpracovávat GET požadavek buď podle přípony nebo celého názvu nebo podmínek, které si zjistí rozšíření samo.
+.IP \fB\n+[step] \fR
+Pokud soubor, na který se daný požadavek vztahuje, existuje, je soubor odeslán. Pokud ne, je odeslán soubor 404.html. Pokud ani ten neexistuje, je vygenerován nový a klient dostane směšnou zprávu o neexistenci souboru 404: "404 404 - 404 Not found". Tato zpráva se objeví jen jednou.
+.IP \fB\n+[step] \fR
+Pokud uživatel zkouší subdoménu, je požadavek zpracován třídou SubdomainService.
+.SH LIMITACE
+    Do konfiguračních souborů nelze ukládat složitější hodnoty, jako jsou např. instance tříd a pole jiných hodnot, než řetězců. Ne všechny cesty programu jsou ošetřené, a proto úmyslně špatné vstupy mohou skončit výjimkou.
+.SH MAPA KÓDU
+.TP
+.BR \fBProgram.cs\fR
+Hlavní soubor, který obsahuje kód metody Main() a kód po vytvoření socketu a zpracování HTTP headerů.
+.TP
+.BR \fBApiVersion.cs\fR
+Obsahuje atribut verze, který musí každé rozšíření mít. Rozšíření s nesprávnou verzí v atributu nebo bez něj nejsou načteny.
+.TP
+.BR \fBCommonDelegates.cs\fR
+Obsahuje delegáty pro zpracování některých souborových typů, které sdílejí MIME-type.
+.TP
+.BR \fBComponentLoader.cs\fR
+Načítá rozšíření. Silně modifikovaná stará verze načítače ze serveru TShock pro hru Terraria.
+.TP
+.BR \fBComponentContainer.cs\fR
+Kód pro kontejner rozšíření.
+.TP
+.BR \fBConfig.cs\fR
+Verze knihovny MicroConfig obsažená v net_47sb_59vm.
+.TP
+.BR \fBHatComponent.cs\fR
+Vzorová třída pro rozšíření. Všechna rozšíření musí mít podtřídu třídy HatComponent.
+.TP
+.BR \fBInteraction.cs\fR
+Obsahuje kód pro zpracování souborových typů, jmen GET requestů, přípon a POST requesty.
+.TP
+.BR \fBLogger.cs\fR
+Asynchronní implementace loggeru.
+.TP
+.BR \fBSubdomainService.cs\fR
+Zprostředkovává práci s virtuálními subdoménami.
+.TP
+.BR \fBUtils.cs\fR
+Obsahuje pomocné metody.
+.TP
+.BR \fBValuePair.cs\fR
+Implementace generického typu ValuePair, který obsahuje dva objekty na jednou. Využit pro slovníky, kdy k jednomu klíči je potřeba uložit dvě hodnoty.
+.SH PŘÍKLAD POUŽITÍ
+    Příklady použití je možné nálezt ve složkách \fBbin/Debug/server\fR, \fBbin/Debug/test a \fB/bin/Debug/'website bieren'\fR. Pro test a 'website bieren' je potřeba přidat záznamy do souboru hosts. Návod je k dispozici u konfiguračního souboru subdomén ve složce services. Příklad website bieren byl napsán Laurensem de Voogd původně pro jeho bratra Vincenta.
+    Jednoduchý příklad rozšíření je projekt \fBHookTest\fR. Příklady zpracování souborových typů a názvu je možné nalézt v souborech \fBInteraction.cs\fR a \fBCommonDelegates\fR.
+.SH LICENCE
+Fair License
+
+(c)Lukáš Hozda, 2015-2017
+
+Usage of the works is permitted provided that this 
+instrument is retained with the works, so that any 
+entity that uses the works is notified of this instrument.
+
+DISCLAIMER: THE WORKS ARE WITHOUT WARRANTY. 
