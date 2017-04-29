@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
+        <title>BierSoorten</title>
+    	<meta name="keywords" content="" />
+		<meta name="description" content="" />
+<!-- 
+Nature Template 
+http://www.templatemo.com/free-website-templates/398-nature
+-->
+        <meta name="viewport" content="width=device-width">
+        
+        <!-- Google Web Font Embed -->
+        <link href='http://fonts.googleapis.com/css?family=Raleway:400,600,500,300,700' rel='stylesheet' type='text/css'>
+        
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/templatemo_main.css">
+        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/style.css" ></link>
+  		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+  		<script type="text/javascript" src="js/parllexbeer.js"></script>  
+		<script type="text/javascript" src="js/bierflessen.js"></script>  
+    </head>
+    <body>
+        <div id="main-wrapper">
+            <!--[if lt IE 7]>
+                <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a rel="nofollow" href="http://browsehappy.com">upgrade your browser</a> or <a rel="nofollow" href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+            <![endif]-->
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 affix text-center" style="z-index: 1;">
+                <h1 class="templatemo-site-title">
+                        <a href="#">Bieren</a>
+                        <img src="images/btn-menu.png" alt="main menu" id="m-btn" class="pull-right visible-xs visible-sm" >
+                </h1>
+
+                <ul id="responsive" style="display:none" class="hidden-lg hidden-md"></ul><!-- /.responsive -->
+            </div>
+
+            <div class="menu visible-md visible-lg">
+                <ul id="menu-list">
+                    <li class="active home-menu"><a href="#home">Home</a></li>
+                    <li class="about-menu"><a href="#about">Lijst</a></li>
+                    <li class="services-menu"><a href="#services">Weetjes</a></li>
+                    <li class="contact-menu"><a href="#contact">Proef zelf!</a></li>
+                </ul>
+            </div><!-- /.menu -->
+
+            <div class="image-section">
+                <div class="image-container">
+                    <img src="images/nature1.jpg" id="home-img" class="main-img inactive" alt="Home">
+                    <img src="images/nature2.jpg" id="about-img" class="inactive" alt="About">
+                    <img src="images/nature3.jpg" id="services-img"  class="inactive" alt="Services">
+                    <img src="images/nature4.jpg" id="testimonial-img" class="inactive" alt="Testimonial">
+                    <img src="images/nature5.jpg" id="contact-img" class="inactive" alt="Contact">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-lg-offset-6 col-md-offset-6 templatemo-content-wrapper">
+                    <div class="templatemo-content">
+                        
+                        <section id="home-text" class="active templatemo-content-section">
+                            <div class="col-sm-12 col-md-12 col-lg-12">
+                                <h2>Welkom bij Belgische Streekbieren</h2>
+                                <p>Op deze website zul je heel wat meer te weten komen over belgische streekbieren.</p>
+                                <p></p>														
+                            </div>
+                        </section><!-- /.home-text -->    
+
+                        <section id="about-text" class="inactive">
+                            <h2 class="text-center">Lijst met bieren</h2>
+							<style type="text/css">
+								table.tableizer-table {
+									border: 1px solid #CCC; font-family: Arial, Helvetica, sans-serif;
+									font-size: 12px;
+								} 
+								.tableizer-table td {
+									padding: 4px;
+									margin: 3px;
+									border: 1px solid #ccc;
+								}
+								.tableizer-table th {
+									background-color: #104E8B; 
+									color: #FFF;
+									font-weight: bold;
+								}
+								table .bier:hover { 
+									background-color: yellow;
+									font-size:150%;
+								}
+								</style>
+                            
+                                <p>
+								<table id="biertabel" style="width:100%" align="center" class="tableizer-table">
+									<tr class="tableizer-firstrow">
+										<th style="width:70px"></th>
+										<th>naam bier</th>
+										<th>percentage alcohol</th>
+										<th>score caje</th><th>score tom</th>
+										<th>De ceulemans-verbiest-index</th>
+									</tr>
+									 <tr><td></td><td>&nbsp;</td><td>&nbsp;</td><td>op 5</td><td>op 5</td><td>op 10</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none" src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Augustijn grand cru</td><td>7,00%</td><td>2</td><td>3</td><td>5</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Aupulus</td><td>8,30%</td><td>4</td><td>5</td><td>9</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Bieke</td><td>8,70%</td><td>2</td><td>2</td><td>4</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Biere du corsaire</td><td>8,00%</td><td>2</td><td>3</td><td>5</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Big nose tripel</td><td>6,90%</td><td>1</td><td>2</td><td>3</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Bink Tripel</td><td>7,00%</td><td>2</td><td>3</td><td>5</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Bootjesbier</td><td>7,60%</td><td>3</td><td>3</td><td>6</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Cesar</td><td>7,00%</td><td>2</td><td>2</td><td>4</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Corne</td><td>6,80%</td><td>2</td><td>2</td><td>4</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>De soldaat</td><td>8,50%</td><td>4</td><td>3</td><td>7</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Eden Blond</td><td>8,00%</td><td>2</td><td>4</td><td>6</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Ezel</td><td>9,00%</td><td>2</td><td>2</td><td>4</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Fort lapin tripel</td><td>9,50%</td><td>3</td><td>3</td><td>6</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Gentse Strop</td><td>8,50%</td><td>4</td><td>4</td><td>8</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Guldenberg</td><td>9,20%</td><td>3</td><td>3</td><td>6</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Herberg tripel</td><td>7,00%</td><td>1</td><td>2</td><td>3</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Hop verdomme blond</td><td>7,50%</td><td>4</td><td>3</td><td>7</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Jan Van Oudenaarde</td><td>12,00%</td><td>3</td><td>3</td><td>6</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Julius</td><td>7,00%</td><td>2</td><td>&nbsp;</td><td>2</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Kapittel bruin</td><td>8,00%</td><td>3</td><td>3</td><td>6</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Kapittel watou</td><td>7,50%</td><td>3</td><td>3</td><td>6</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Kessel 69 donker</td><td>6,00%</td><td>3</td><td>3</td><td>6</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Kessel blond</td><td>6,90%</td><td>1</td><td>1</td><td>2</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Klets</td><td>8,00%</td><td>4</td><td>4</td><td>8</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Kwibus tripel</td><td>8,00%</td><td>1</td><td>1</td><td>2</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>La trappe jubilaris amber</td><td>8,50%</td><td>4</td><td>&nbsp;</td><td>4</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>La trappe tripel</td><td>8,00%</td><td>2</td><td>3</td><td>5</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>La troufette</td><td>8,00%</td><td>5</td><td>4</td><td>9</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Le fort</td><td>7,00%</td><td>3</td><td>2</td><td>5</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Lucifer</td><td>7,00%</td><td>4</td><td>4</td><td>8</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Morpheus Tripel</td><td>7,20%</td><td>3</td><td>3</td><td>6</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Neuzebier tripel</td><td>8,50%</td><td>3</td><td>3</td><td>6</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Nivoo tripel</td><td>8,50%</td><td>3</td><td>3</td><td>6</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Norman</td><td>8,50%</td><td>3</td><td>2</td><td>5</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Pilaarbijter</td><td>8,50%</td><td>2</td><td>3</td><td>5</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Ploegbaas</td><td>9%</td><td>2</td><td>&nbsp;</td><td>2</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Sint Gummarus</td><td>9,40%</td><td>4</td><td>4</td><td>8</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Sint gummarus tripel</td><td>7,00%</td><td>3</td><td>&nbsp;</td><td>3</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Sparrijder</td><td>9,00%</td><td>&nbsp;</td><td>0</td><td>0</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>St Bernardus tripel Watou</td><td>8,30%</td><td>4</td><td>5</td><td>9</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>St Feuillien grand cru licht</td><td>8%</td><td>3</td><td>3</td><td>6</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Steynemolen</td><td>9,00%</td><td>2</td><td>3</td><td>5</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Super des fagnes blond</td><td>8,50%</td><td>2</td><td>3</td><td>5</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Tineke van Heule</td><td>8,50%</td><td>&nbsp;</td><td>2</td><td>2</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Tournee general remium triple</td><td>8,50%</td><td>2</td><td>2</td><td>4</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Tripel kanunnik</td><td>8,50%</td><td>4</td><td>3</td><td>7</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Tripel klok (amber)</td><td>8,20%</td><td>3</td><td>3</td><td>6</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Triporteur belgium oak amber</td><td>10,00%</td><td>2</td><td>2</td><td>4</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Trisser</td><td>7,50%</td><td>4</td><td>4</td><td>8</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Urthel samaranth</td><td>9,00%</td><td>3</td><td>3</td><td>6</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Viking</td><td>11,50%</td><td>2</td><td>3</td><td>5</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Vleteren blond (honing)</td><td>8,00%</td><td>3</td><td>2</td><td>5</td></tr>
+									 <tr class="bier" onmouseover="Showbeer(this)" onmouseleave="Hidebeer(this)"><td><img style="display:none"src="images/bieren/augustijn-grand-cru.jpg" height="60" width="60"></td><td>Watou Tripel</td><td>8,50%</td><td>5</td><td>&nbsp;</td><td>5</td></tr>
+								</table>
+								</p>
+                           
+                            <div class="col-sm-6 col-md-6">
+                                <p></p>
+                            </div>
+                        </section><!-- /.about-text --> 
+
+                        <section id="services-text" class="inactive">
+                            <h2 class="text-center">Weetjes over bieren</h2>
+                            <div class="col-sm-4 col-md-4">
+                                <h3>weetje 1</h3>
+                                <p>iets</p>
+                            </div>
+                            <div class="col-sm-4 col-md-4">
+                                <h3>weetje 2</h3>
+                                <p>iets</p>
+                            </div>
+                            <div class="col-sm-4 col-md-4">
+                                <h3>weetje 3</h3>
+                                <p>iets</p>
+                            </div>
+                        </section><!-- /.services-text --> 
+
+
+                        <section id="contact-text" class="inactive">
+                             <section class="contant">
+                        <p>Scroll om bier te drinken!	het glas is</p> <p id="teller">0</p><p> keer leeggedronken.</p>
+                        <p>
+                         <button id="reset">Give Me More</button>
+                        </p>
+                       <div id="bearhold"></div>
+                        </section>
+                       
+                        </section><!-- /.contact-text --> 
+                    </div><!-- /.templatemo-content -->  
+                </div><!-- /.templatemo-content-wrapper --> 
+            </div><!-- /.row --> 
+
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 footer">
+                    <p class="footer-text">
+                    	<span>Copyright &copy; 2015 Vincent de Voogd</span>
+                	</p>
+                </div><!-- /.footer --> 
+            </div>
+
+	</div><!-- /#main-wrapper -->
+        
+        <div id="preloader">
+            <div id="status">&nbsp;</div>
+        </div><!-- /#preloader -->
+        
+        <script src="js/jquery.min.js"></script>
+        <script src="js/jquery.backstretch.min.js"></script>
+        <script src="js/templatemo_script.js"></script>
+        <!-- templatemo 398 nature -->
+    </body>
+</html>

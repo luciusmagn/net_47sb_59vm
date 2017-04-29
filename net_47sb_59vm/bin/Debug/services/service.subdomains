@@ -1,0 +1,11 @@
+#This is the file for configurations of subdomains
+#It should follow this syntax:
+#   1. One entry per line;
+#   2. No spaces between name, = and path
+#   3. The path is relative and shouldn't start with a \\
+#example entries:
+bieren.localhost=website bieren\
+test.localhost=test\
+#note that these entries need to also have an entry in your Windows/System32/drivers/etc/hosts file
+# 127.0.0.1     bieren.localhost
+# 127.0.0.1     test.localhost

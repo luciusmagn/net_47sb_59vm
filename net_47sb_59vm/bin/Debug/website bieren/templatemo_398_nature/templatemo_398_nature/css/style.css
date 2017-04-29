@@ -1,0 +1,16 @@
+
+#button{
+width: 100px;
+height: 50px;
+border-radius: 3px;
+margin: 20px auto;
+}
+#bearhold{
+background: url('../images/beer_sprite.jpg') no-repeat;
+width: 315px;
+height: 600px;
+margin: 0 auto;
+}
+#reset{
+display: none;
+}
