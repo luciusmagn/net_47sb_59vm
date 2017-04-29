@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hat.NET", "Hat.NET.csproj", "{2DFEBB29-C2F6-485B-830E-A762C29F4B1D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "net_47sb_59vm", "net_47sb_59vm.csproj", "{2DFEBB29-C2F6-485B-830E-A762C29F4B1D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HookTest", "..\HookTest\HookTest.csproj", "{89638AC4-220B-42A8-8AFE-B063E301A970}"
 EndProject

@@ -1,12 +1,7 @@
-﻿using Hat.NET.Interaction;
-using System;
-using System.Collections.Generic;
+﻿using net_47sb_59vm.Interaction;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Hat.NET
+namespace net_47sb_59vm
 {
     public static class Delegates
     {

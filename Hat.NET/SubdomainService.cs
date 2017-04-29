@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Hat.NET.Interaction;
-using System.Collections;
+using net_47sb_59vm.Interaction;
 using System.IO;
 
-namespace Hat.NET
+namespace net_47sb_59vm
 {
     public class SubdomainService
     {
@@ -100,14 +98,13 @@ namespace Hat.NET
                 if (!Directory.Exists(Path.Combine(Environment.CurrentDirectory, "services")))
                     Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, "services"));
                 File.WriteAllText(Path.Combine(Environment.CurrentDirectory, "services", "service.subdomains"),
-                    @"#This is the file for configurations of subdomains
+@"#This is the file for configurations of subdomains
 #It should follow this syntax:
 #   1. One entry per line;
 #   2. No spaces between name, = and path
 #   3. The path is relative and shouldn't start with a \\
 #example entry:
-test.localhost=banana\test
-                    ");
+test.localhost=banana\test");
             }
         }
     }
@@ -115,7 +112,7 @@ test.localhost=banana\test
 
 }
 
-namespace Hat.NET.Configs
+namespace net_47sb_59vm.NET.Configs
 {
     public class SubdomainService : Config
     {

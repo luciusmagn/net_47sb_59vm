@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Security.Permissions;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Hat.NET.Interaction
+namespace net_47sb_59vm.Interaction
 {
     public delegate void Hook(string fileName, HttpProcessor processor, HandleHaltArgs e);
     public delegate void POSTHook(string fileName, HttpProcessor processor, StreamReader inputData, HandleHaltArgs e);

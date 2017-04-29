@@ -15,54 +15,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 using System;
 
-namespace Hat.NET
+namespace net_47sb_59vm
 {
     public class ComponentContainer : IDisposable
     {
-        public HatComponent Component
-        {
-            get;
-            protected set;
-        }
-
-        public bool Initialized
-        {
-            get;
-            protected set;
-        }
-        public bool Dll
-        {
-            get;
-            set;
-        }
-
-        public ComponentContainer(HatComponent extension)
-            : this(extension, true)
-        {
-        }
-
+        public HatComponent Component { get; protected set; }
+        public bool Initialized { get; protected set; }
+        public bool Dll { get; set; }
+        public ComponentContainer(HatComponent extension) : this(extension, true) { }
         public ComponentContainer(HatComponent plugin, bool dll)
         {
-            this.Component = plugin;
-            this.Initialized = false;
-            this.Dll = dll;
+            Component = plugin;
+            Initialized = false;
+            Dll = dll;
         }
-
         public void Initialize()
         {
-            this.Component.Initialize();
-            this.Initialized = true;
+            Component.Initialize();
+            Initialized = true;
         }
-
-        public void DeInitialize()
-        {
-            this.Initialized = false;
-        }
-
-        public void Dispose()
-        {
-            this.Component.Dispose();
-        }
+        public void DeInitialize() { this.Initialized = false; }
+        public void Dispose() { Component.Dispose(); }
     }
 }
 

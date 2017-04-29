@@ -2,9 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 
-namespace Hat.NET
+namespace net_47sb_59vm
 {
     public delegate void Command(string[] args);
     public static class CmdConsole
@@ -65,7 +64,7 @@ namespace Hat.NET
                     if (command.StartsWith(cmd.LeftValue))
                     {
                         cmd.RightValue.Invoke(
-                            command.Substring(cmd.LeftValue.Length).TrimStart().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
+                                command.Substring(cmd.LeftValue.Length).TrimStart().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
                             );
                         found = true;
                         break;
@@ -153,9 +152,6 @@ namespace Hat.NET
                 case 1:
                     Logger.Log(Variables[args[0]]);
                     return;
-                case 2:
-
-                    break;
             }
         }
 
@@ -205,17 +201,12 @@ namespace Hat.NET
                 }
                 else
                 {
-                    if (args[1] != "=")
+                    if (args[1] != "=" || args.Length < 3)
                         Logger.Log("Syntax error: ", string.Join(" ", args));
                     else
                     {
-                        if (args.Length < 3)
-                            Logger.Log("Syntax error: ", string.Join(" ", args));
-                        else
-                        {
-                            Variables.Add(args[0], string.Join(" ", args).Replace(args[0] + " = ", ""));
-                            Logger.Log(string.Format("{0} set to {1}", args[0], Variables[args[0]]));
-                        }
+                        Variables.Add(args[0], string.Join(" ", args).Replace(args[0] + " = ", ""));
+                        Logger.Log(string.Format("{0} set to {1}", args[0], Variables[args[0]]));
                     }
                 }
             }

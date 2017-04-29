@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace Hat.NET
+namespace net_47sb_59vm
 {
     /// <summary>
     /// Halcyon logger. Handles logging and saving logs to a file.
@@ -134,10 +130,7 @@ namespace Hat.NET
                 LogContent.Clear();
             }
         }
-        public static void ViewLog(StreamWriter p)
-        {
-            p.WriteLine(FullLog.ToString());
-        }
+        public static void ViewLog(StreamWriter p) { p.WriteLine(FullLog.ToString()); }
 
         public static void LogWorker()
         {

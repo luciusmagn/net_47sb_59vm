@@ -17,29 +17,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
-using System.Net;
 using System.Reflection;
 using System.Linq;
-using System.Runtime.InteropServices;
 
-namespace Hat.NET
+namespace net_47sb_59vm
 {
     public static class ComponentLoader
     {
         public static readonly string ExtensionsPath = Program.cfg.componentspath;
         private static readonly Dictionary<string, Assembly> loadedAssemblies = new Dictionary<string, Assembly>();
         private static readonly List<ComponentContainer> extensions = new List<ComponentContainer>();
-        public static string ExtensionsDirectoryPath
-        {
-            get;
-            private set;
-        }
-        public static ReadOnlyCollection<ComponentContainer> Extensions
-        {
-            get { return new ReadOnlyCollection<ComponentContainer>(extensions); }
-        }
+        public static string ExtensionsDirectoryPath { get; private set; }
+        public static ReadOnlyCollection<ComponentContainer> Extensions { get { return new ReadOnlyCollection<ComponentContainer>(extensions); } }
 
         internal static void Initialize()
         {
@@ -48,26 +38,19 @@ namespace Hat.NET
             {
                 string lcDirectoryPath =
                     Path.Combine(Path.GetDirectoryName(ExtensionsDirectoryPath), ExtensionsPath.ToLower());
-
                 if (Directory.Exists(lcDirectoryPath))
                 {
                     Directory.Move(lcDirectoryPath, ExtensionsDirectoryPath);
                     Logger.Log("Case sensitive filesystem detected, extensions directory has been renamed.");
                 }
                 else
-                {
                     Directory.CreateDirectory(ExtensionsDirectoryPath);
-                }
             }
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
-
             LoadExtensions();
         }
 
-        internal static void DeInitialize()
-        {
-            UnloadExtensions();
-        }
+        internal static void DeInitialize() { UnloadExtensions(); }
 
         internal static void LoadExtensions()
         {
@@ -81,14 +64,8 @@ namespace Hat.NET
                     Assembly assembly;
                     if (!loadedAssemblies.TryGetValue(fileNameWithoutExtension, out assembly))
                     {
-                        try
-                        {
-                            assembly = Assembly.Load(File.ReadAllBytes(fileInfo.FullName));
-                        }
-                        catch (BadImageFormatException)
-                        {
-                            continue;
-                        }
+                        try { assembly = Assembly.Load(File.ReadAllBytes(fileInfo.FullName)); }
+                        catch (BadImageFormatException) { continue; }
                         loadedAssemblies.Add(fileNameWithoutExtension, assembly);
                     }
                     foreach (Type type in assembly.GetExportedTypes())
@@ -109,21 +86,12 @@ namespace Hat.NET
                         }
                         HatComponent extensionInstance;
                         extensionInstance = (HatComponent)Activator.CreateInstance(type);
-                        try
-                        {
-                            extensionInstance = (HatComponent)Activator.CreateInstance(type);
-                        }
-                        catch (Exception ex)
-                        {
-                            Logger.Log(String.Format("Could not create an instance of extension class \"{0}\""), type.FullName + "\n" + ex);
-                        }
+                        try { extensionInstance = (HatComponent)Activator.CreateInstance(type); }
+                        catch (Exception ex) { Logger.Log(String.Format("Could not create an instance of extension class \"{0}\""), type.FullName + "\n" + ex); }
                         extensions.Add(new ComponentContainer(extensionInstance));
                     }
                 }
-                catch (Exception ex)
-                {
-                    Logger.Log(string.Format("Failed to load assembly \"{0}\".", fileInfo.Name) + ex);
-                }
+                catch (Exception ex) { Logger.Log(string.Format("Failed to load assembly \"{0}\".", fileInfo.Name) + ex); }
             }
             IOrderedEnumerable<ComponentContainer> orderedExtensionSelector =
                 from x in Extensions
@@ -133,9 +101,7 @@ namespace Hat.NET
             {
                 int count = 0;
                 foreach (ComponentContainer current in orderedExtensionSelector)
-                {
                     count++;
-                }
                 foreach (ComponentContainer current in orderedExtensionSelector)
                 {
                     try
@@ -155,9 +121,7 @@ namespace Hat.NET
                         "Extension {0} v{1} (by {2}) initiated.", current.Component.Name, current.Component.Version, current.Component.Author));
                 }
             }
-            catch
-            {
-            }
+            catch { }
         }
 
         internal static void UnloadExtensions()
@@ -179,19 +143,12 @@ namespace Hat.NET
 
             foreach (ComponentContainer ComponentContainer in extensions)
             {
-
-
-                try
-                {
-                    ComponentContainer.Dispose();
-                }
+                try { ComponentContainer.Dispose(); }
                 catch (Exception ex)
                 {
                     Logger.Log(string.Format(
                         "Extension \"{0}\" has thrown an exception while being disposed:\n{1}", ComponentContainer.Component.Name, ex));
                 }
-
-
             }
         }
 

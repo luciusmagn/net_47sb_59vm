@@ -16,7 +16,7 @@ along with this program.If not, see<http://www.gnu.org/licenses/>.
 
 using System;
 
-namespace Hat.NET
+namespace net_47sb_59vm
 {
     public abstract class HatComponent : IDisposable
     {
@@ -39,11 +39,11 @@ namespace Hat.NET
         public int Order { get; set; }
 
         protected HatComponent() { this.Order = 1; }
-        ~HatComponent() { this.Dispose(false); }
+        ~HatComponent() { Dispose(false); }
 
         public void Dispose()
         {
-            this.Dispose(true);
+            Dispose(true);
             GC.SuppressFinalize(this);
         }
 

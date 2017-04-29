@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Serialization;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace Hat.NET
+namespace net_47sb_59vm
 {
     /// <summary>
     /// Simplistic config solution
@@ -46,6 +44,8 @@ namespace Hat.NET
 
         public static void Save(object what)
         {
+            if (!Directory.Exists(Path.Combine(Environment.CurrentDirectory, "configs")))
+                Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, "configs"));
             StreamWriter str = File.CreateText(Path.Combine(Environment.CurrentDirectory, "configs", what.GetType().Name + ".cfg"));
             str.WriteLine(Serialize(what));
             str.Flush();
@@ -133,7 +133,7 @@ namespace Hat.NET
         {
             public string ConsoleReadyString = "->";
             public char CommandDelimiter = ';';
-            public string[] arr = new string[] { "meow", "bitch" };
+            public string[] arr = new string[] { "meow", "test" };
 
             public Console(bool autoload) : base(true) { }
             public Console() { }

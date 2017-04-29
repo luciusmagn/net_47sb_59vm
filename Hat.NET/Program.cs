@@ -2,18 +2,12 @@
 using System.Collections;
 using System.ComponentModel;
 using System.IO;
-using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
-// HTTP stuff offered to the public domain for any use with no restriction
-// and also with no warranty of any kind, please enjoy. - David Jeske.
-
-
-namespace Hat.NET
+namespace net_47sb_59vm
 {
-
     public class HttpProcessor
     {
         public TcpClient socket;
@@ -53,11 +47,7 @@ namespace Hat.NET
         }
         public void process()
         {
-            // we can't use a StreamReader for input, because it buffers up extra data on us inside it's
-            // "processed" view of the world, and we want the data raw after the headers
             inputStream = new BufferedStream(socket.GetStream());
-
-            // we probably shouldn't be using a streamwriter for all output from handlers either
             outputStream = new StreamWriter(new BufferedStream(socket.GetStream()));
             try
             {
@@ -78,8 +68,7 @@ namespace Hat.NET
                 outputStream.Flush();
             }
             catch { }
-            // bs.Flush(); // flush any remaining output
-            inputStream = null; outputStream = null; // bs = null;
+            inputStream = null; outputStream = null;
             socket.Close();
         }
 
@@ -181,13 +170,10 @@ namespace Hat.NET
 
         public void writeFailure()
         {
-            // this is an http 404 failure response
             outputStream.WriteLine("HTTP/1.0 404 File not found");
-            // these are the HTTP headers
             outputStream.WriteLine("Connection: close");
-            // ..add your own headers here
 
-            outputStream.WriteLine(""); // this terminates the HTTP headers.
+            outputStream.WriteLine("");
         }
     }
 
@@ -224,7 +210,6 @@ namespace Hat.NET
                 return;
             if (Interaction.Interaction.TryName(p.http_url, p))
                 return;
-            //If file doesn't exist try trying it as a folder
             if (Directory.Exists(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Length == 1 ? "" : p.http_url.Substring(1))) && !File.Exists(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), p.http_url.Length == 1 ? "" : p.http_url.Substring(1))))
             {
                 p.http_url += (p.http_url == "/" ? "" : "/");
@@ -233,7 +218,6 @@ namespace Hat.NET
                 bool flag = false;
                 foreach (string filename in files)
                 {
-                    //We need to find an index. But we don't need to send more than one at a time
                     if (Path.GetFileName(filename).Contains("index"))
                     {
                         Logger.Log(filename);
@@ -285,9 +269,9 @@ namespace Hat.NET
 
         public static void handle404(HttpProcessor p)
         {
-            if (File.Exists(Path.Combine(Environment.CurrentDirectory, "server/404")))
+            if (File.Exists(Path.Combine(Environment.CurrentDirectory, "server/404.html")))
             {
-                string fs = File.ReadAllText(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), "404"));
+                string fs = File.ReadAllText(Path.Combine(Path.Combine(Environment.CurrentDirectory, "server"), "404.html"));
                 p.writeSuccess();
                 p.outputStream.WriteLine(fs);
                 p.outputStream.Flush();
@@ -313,22 +297,23 @@ namespace Hat.NET
         public static Thread ControlThread;
         public static int Main(string[] args)
         {
-            Console.Title = "I really need a name";
-            HttpServer httpServer;
             PerformFileCheck();
+            cfg = new Configs.Main();
+            Console.Title = "net_47sb_59vm";
+            HttpServer httpServer;
             SubdomainService.Initialize();
             ComponentLoader.Initialize();
             if (args.Length > 0)
             {
                 httpServer = new HttpServer(Convert.ToInt16(args[0]));
                 Logger.Log("Listening on port ", args[0]);
-                Console.Title = "I really need a name:" + args[0];
+                Console.Title = "net_47sb_59vm:" + args[0];
             }
             else
             {
                 httpServer = new HttpServer(cfg.defaultport);
                 Logger.Log("Listening on port " + cfg.defaultport.ToString());
-                Console.Title = "I really need a name:" + cfg.defaultport.ToString();
+                Console.Title = "net_47sb_59vm:" + cfg.defaultport.ToString();
             }
             LoggerThread = new Thread(new ThreadStart(Logger.LogWorker));
             LoggerThread.Start();
@@ -359,8 +344,8 @@ namespace Hat.NET
 
             if (!Directory.Exists(Path.Combine(Environment.CurrentDirectory, cfg.codepath)))
                 Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, cfg.codepath));
-            if (!File.Exists(Path.Combine(Environment.CurrentDirectory, "server/404")))
-                File.WriteAllText(Path.Combine(Environment.CurrentDirectory, "server/404"), "<h1>404 - Not found</h1><br><h5>__________________________________________________________________<br>Hat.NET - an opensource .NET webserver software</h5>".WriteHTMLStub("<title>404</title>"));
+            if (!File.Exists(Path.Combine(Environment.CurrentDirectory, "server/404.html")))
+                File.WriteAllText(Path.Combine(Environment.CurrentDirectory, "server/404.html"), "<h1>404 - Not found</h1><br><h5>__________________________________________________________________<br>Hat.NET - an opensource .NET webserver software</h5>".WriteHTMLStub("<title>404</title>"));
         }
 
         public static void Control()

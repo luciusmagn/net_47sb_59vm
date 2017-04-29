@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Hat.NET
+namespace net_47sb_59vm
 {
     public static class Utils
     {
@@ -104,7 +100,7 @@ namespace Hat.NET
 
         public static void WriteCommon(string mime, string filename, HttpProcessor p)
         {
-            p.writeSuccess("text/troff");
+            p.writeSuccess(mime);
             p.outputStream.Write(File.ReadAllText(filename));
             p.outputStream.Flush();
         }
