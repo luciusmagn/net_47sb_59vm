@@ -7,8 +7,8 @@
     <ProjectGuid>{2DFEBB29-C2F6-485B-830E-A762C29F4B1D}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Hat.NET</RootNamespace>
-    <AssemblyName>Hat.NET</AssemblyName>
+    <RootNamespace>net_47sb_59vm</RootNamespace>
+    <AssemblyName>net_47sb_59vm</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
